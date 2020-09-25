@@ -1,35 +1,60 @@
-plugins {
-	id 'org.springframework.boot' version '2.3.4.RELEASE'
-	id 'io.spring.dependency-management' version '1.0.10.RELEASE'
-	id 'java'
-}
-
-group = 'com.library'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
+buildscript {
+	ext {
+		springBootVersion = '2.1.1.RELEASE'
+		querydslPluginVersion = '1.0.10'
+	}
+	repositories {
+		mavenCentral()
+		maven { url "https://plugins.gradle.org/m2/" } // plugin 저장소
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}")
 	}
 }
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.jojoldu.blogcode'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
 
 repositories {
 	mavenCentral()
 }
 
+
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	compile("com.querydsl:querydsl-jpa") // querydsl
+	compile("com.querydsl:querydsl-apt") // querydsl
+
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-web')
 	runtimeOnly 'mysql:mysql-connector-java'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
+	compile('org.projectlombok:lombok')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
-test {
-	useJUnitPlatform()
+
+apply plugin: "com.ewerk.gradle.plugins.querydsl"
+def querydslSrcDir = 'src/main/generated'
+querydsl {
+	library = 'com.querydsl:querydsl-apt:4.2.1'
+	jpa=true
+	querydslSourcesDir = querydslSrcDir
+}
+
+compileQuerydsl {
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+sourceSets {
+	main {
+		java {
+			srcDirs = ['src/main/java', querydslSrcDir]
+		}
+	}
 }
