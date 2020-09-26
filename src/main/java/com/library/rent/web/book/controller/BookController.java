@@ -29,10 +29,9 @@ public class BookController {
     }
 
     @GetMapping("/book")
-    public List<BookDto.BookInfo> getBooks(
-    )
+    public List<BookDto.BookInfo> getBooks(BookDto.SearchBooksParam param)
     {
-        return bookService.getBooks();
+        return bookService.getBooks(param);
     }
 
 }

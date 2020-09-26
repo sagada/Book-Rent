@@ -1,54 +1,38 @@
 buildscript {
-	ext {
-		springBootVersion = '2.1.1.RELEASE'
-		querydslPluginVersion = '1.0.10'
+	ext{
+		springBootVersion = '2.1.7.RELEASE'
+		queryDslPluginVersion = '1.0.9'
+
 	}
 	repositories {
 		mavenCentral()
 		maven { url "https://plugins.gradle.org/m2/" } // plugin 저장소
 	}
+
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${querydslPluginVersion}")
+		classpath "io.spring.gradle:dependency-management-plugin:1.0.7.RELEASE"
+		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${queryDslPluginVersion}")
 	}
 }
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
+group 'com.library.rent'
+version '1.0-SNAPSHOT'
 
-group = 'com.jojoldu.blogcode'
-version = '0.0.1-SNAPSHOT'
+// querydsl 적용
+apply plugin: "com.ewerk.gradle.plugins.querydsl" // Plugin 적용
 sourceCompatibility = 1.8
-
-repositories {
-	mavenCentral()
-}
-
-
-dependencies {
-	compile("com.querydsl:querydsl-jpa") // querydsl
-	compile("com.querydsl:querydsl-apt") // querydsl
-
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	runtimeOnly 'mysql:mysql-connector-java'
-	compile('org.projectlombok:lombok')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-}
-
-
-apply plugin: "com.ewerk.gradle.plugins.querydsl"
 def querydslSrcDir = 'src/main/generated'
-querydsl {
-	library = 'com.querydsl:querydsl-apt:4.2.1'
-	jpa=true
-	querydslSourcesDir = querydslSrcDir
-}
 
-compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
+
+querydsl {
+	library = "com.querydsl:querydsl-apt"
+	jpa = true
+	querydslSourcesDir = querydslSrcDir
+	querydslDefault = true
 }
 
 sourceSets {
@@ -57,4 +41,36 @@ sourceSets {
 			srcDirs = ['src/main/java', querydslSrcDir]
 		}
 	}
+}
+
+compileQuerydsl{
+	options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+	querydsl.extendsFrom compileClasspath
+}
+
+repositories {
+	mavenCentral()
+	maven { url "https://plugins.gradle.org/m2/" } // plugin 저장소
+}
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+
+	implementation 'com.querydsl:querydsl-apt:4.1.4'
+	implementation 'com.querydsl:querydsl-jpa:4.1.4'
+
+
+	// 1. Use Guava in your implementation only:
+	implementation("com.google.guava:guava:29.0-jre")
+
+	implementation 'com.querydsl:querydsl-jpa'
+	compile('org.projectlombok:lombok')
+	annotationProcessor 'org.projectlombok:lombok'
+	runtimeOnly 'mysql:mysql-connector-java'
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	testCompile('org.springframework.boot:spring-boot-starter-test')
 }

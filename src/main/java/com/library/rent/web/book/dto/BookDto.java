@@ -1,6 +1,8 @@
 package com.library.rent.web.book.dto;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class BookDto {
@@ -11,6 +13,7 @@ public class BookDto {
     }
 
     @Getter
+    @Setter
     public static class SetBooksXlsxParam
     {
         private Long id;
@@ -30,7 +33,11 @@ public class BookDto {
         private int count;
         private String publisher;
     }
+
+    @Setter
     @Getter
+    @Builder
+    @NoArgsConstructor
     public static class SearchBooksParam
     {
         private String name;
