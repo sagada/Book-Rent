@@ -1,5 +1,6 @@
 package com.library.rent.web.book.dto;
 
+import com.library.rent.web.book.domain.Book;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,19 +26,20 @@ public class BookDto {
 
     @Getter
     @Setter
+    @Builder
     public static class BookInfo
     {
         private Long id;
         private String name;
-        private Long isbn;
+        private String isbn;
         private int count;
         private String publisher;
+
     }
 
     @Setter
     @Getter
     @Builder
-    @NoArgsConstructor
     public static class SearchBooksParam
     {
         private String name;

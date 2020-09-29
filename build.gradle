@@ -62,9 +62,8 @@ dependencies {
 
 	implementation 'com.querydsl:querydsl-apt:4.1.4'
 	implementation 'com.querydsl:querydsl-jpa:4.1.4'
+	compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.0'
 
-
-	// 1. Use Guava in your implementation only:
 	implementation("com.google.guava:guava:29.0-jre")
 
 	implementation 'com.querydsl:querydsl-jpa'

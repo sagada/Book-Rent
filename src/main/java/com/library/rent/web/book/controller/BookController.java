@@ -1,5 +1,6 @@
 package com.library.rent.web.book.controller;
 
+import com.library.rent.util.page.PageRequest;
 import com.library.rent.web.book.dto.BookDto;
 import com.library.rent.web.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +29,16 @@ public class BookController {
         bookService.setBooksXlsx(param);
     }
 
-    @GetMapping("/book")
-    public List<BookDto.BookInfo> getBooks(BookDto.SearchBooksParam param)
+    @GetMapping("/admin/book")
+    public List<BookDto.BookInfo> getBooksAdmin(BookDto.SearchBooksParam param)
     {
-        return bookService.getBooks(param);
+        return bookService.getBooksAdmin(param);
+    }
+
+    @GetMapping("/books")
+    public List<BookDto.BookInfo> getBooks(PageRequest pageRequest, BookDto.SearchBooksParam param)
+    {
+        return bookService.getBooks(pageRequest, param);
     }
 
 }
