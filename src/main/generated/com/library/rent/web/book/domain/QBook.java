@@ -23,7 +23,7 @@ public class QBook extends EntityPathBase<Book> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final NumberPath<Long> isbn = createNumber("isbn", Long.class);
+    public final StringPath isbn = createString("isbn");
 
     public final StringPath name = createString("name");
 

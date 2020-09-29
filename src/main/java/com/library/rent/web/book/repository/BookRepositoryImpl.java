@@ -3,14 +3,16 @@ package com.library.rent.web.book.repository;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.QBook;
 import com.library.rent.web.book.dto.BookDto;
-import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+
+import static com.library.rent.web.book.domain.QBook.book;
 
 public class BookRepositoryImpl extends QuerydslRepositorySupport implements BookRepositoryCustom {
 
@@ -23,22 +25,43 @@ public class BookRepositoryImpl extends QuerydslRepositorySupport implements Boo
     }
 
     @Override
-    public List<BookDto.BookInfo> getBooks(BookDto.SearchBooksParam param)
+    public List<Book> getBooks(BookDto.SearchBooksParam param)
     {
         if (ObjectUtils.isEmpty(param))
             return null;
-        QBook b = QBook.book;
+        QBook b = book;
         JPQLQuery<Book> query = from(b);
 
-        JPQLQuery<Tuple> tuple = query.select(b.isbn, b.name, b.publisher, b.count);
+        return query.from(b)
+                .where(
+                        conTainsName(param.getName()),
+                        conTainsIsbn(param.getIsbn()),
+                        conTainsPublisher(param.getPublisher())
+                )
+                .fetch();
+    }
 
-        tuple.where(b.name.eq(param.getName()));
-        tuple.where(b.count.gt(param.getCount()));
-        tuple.where(b.publisher.eq(param.getPublisher()));
-        tuple.where(b.isbn.eq(param.getIsbn()));
-        tuple.orderBy(b.isbn.desc());
+    private BooleanExpression conTainsName(String name)
+    {
+        if (StringUtils.isEmpty(name)) {
+            return null;
+        }
+        return book.name.contains(name);
+    }
 
-        System.out.println(tuple.fetch());
-        return null;
+    private BooleanExpression conTainsIsbn(String isbn)
+    {
+        if (StringUtils.isEmpty(isbn)) {
+            return null;
+        }
+        return book.isbn.contains(isbn);
+    }
+
+    private BooleanExpression conTainsPublisher(String publisher)
+    {
+        if (StringUtils.isEmpty(publisher)) {
+            return null;
+        }
+        return book.publisher.contains(publisher);
     }
 }

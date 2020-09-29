@@ -41,8 +41,15 @@ public class BookDto {
     public static class SearchBooksParam
     {
         private String name;
-        private Long isbn;
+        private String isbn;
         private int count;
         private String publisher;
+
+        public SearchBooksParam(String name, String isbn, int count, String publisher) {
+            this.name = name;
+            this.isbn = isbn;
+            this.count = count;
+            this.publisher = publisher;
+        }
     }
 }
