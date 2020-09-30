@@ -4,10 +4,7 @@ import com.library.rent.util.page.PageRequest;
 import com.library.rent.web.book.dto.BookDto;
 import com.library.rent.web.book.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,9 +33,11 @@ public class BookController {
     }
 
     @GetMapping("/books")
-    public List<BookDto.BookInfo> getBooks(PageRequest pageRequest, BookDto.SearchBooksParam param)
+    public List<BookDto.BookInfo> getBooks(
+            PageRequest pageRequest
+            ,BookDto.SearchBooksParam param)
     {
-        return bookService.getBooks(pageRequest, param);
+        return bookService.getBooks(pageRequest.of(), param);
     }
 
 }

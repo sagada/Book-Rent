@@ -6,6 +6,7 @@ import com.library.rent.web.book.dto.BookDto;
 import com.library.rent.web.book.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,9 +28,8 @@ public class BookService {
         return null;
     }
 
-    public List<BookDto.BookInfo> getBooks(PageRequest pageRequest, BookDto.SearchBooksParam param) {
-        Page<Book> books =  bookRepository.getBooks(param, pageRequest.of());
-
+    public List<BookDto.BookInfo> getBooks(Pageable pageable, BookDto.SearchBooksParam param) {
+        Page<Book> books =  bookRepository.getBooks(param, pageable);
         return books.stream()
                 .map(book -> BookDto.BookInfo.builder()
                                 .count(book.getCount())

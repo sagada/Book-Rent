@@ -1,5 +1,6 @@
 package com.library.rent.web.book.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.library.rent.web.book.domain.Book;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,15 +40,17 @@ public class BookDto {
 
     @Setter
     @Getter
-    @Builder
+    @NoArgsConstructor
     public static class SearchBooksParam
     {
         private String name;
         private String isbn;
-        private int count;
+        private int count = 0;
         private String publisher;
 
-        public SearchBooksParam(String name, String isbn, int count, String publisher) {
+        @Builder
+        public SearchBooksParam(String name, String isbn, int count, String publisher)
+        {
             this.name = name;
             this.isbn = isbn;
             this.count = count;
