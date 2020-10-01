@@ -1,5 +1,6 @@
 package com.library.rent.web.book.service;
 
+import com.google.common.collect.Lists;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.dto.BookDto;
 import com.library.rent.web.book.repository.BookRepository;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +37,6 @@ public class BookService {
         return books.stream()
                 .map(book -> BookDto.BookInfo.builder()
                                 .count(book.getCount())
-                                .isbn(book.getIsbn())
                                 .publisher(book.getPublisher())
                                 .name(book.getName())
                                 .build())

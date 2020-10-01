@@ -4,18 +4,19 @@ import com.library.rent.util.page.PageRequest;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.dto.BookDto;
 import com.library.rent.web.book.repository.BookRepository;
+import com.library.rent.web.member.domain.Member;
+import com.library.rent.web.member.repository.MemberRepository;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,14 +26,25 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Sql("classpath:sql/book-search-test.sql")
-@Transactional
 public class BookRepositoryTests {
 
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private MemberRepository memberRepository;
+
+    @Before
+    public void 테스트_멤버_초기화()
+    {
+        Member testMember = Member.builder()
+                .name("ADMIN")
+                .build();
+        memberRepository.save(testMember);
+    }
+
     @Test
-    public void 책_이름으로_책_찾기() throws Exception
+    public void 책_이름으로_책_찾기()
     {
         // given
         String searchBookName = "#TEST#";
@@ -48,7 +60,7 @@ public class BookRepositoryTests {
     }
 
     @Test
-    public void 책_출판사와_이름으로_책_찾기() throws Exception
+    public void 책_출판사와_이름으로_책_찾기()
     {
         // given
         String searchBookName = "#TEST#";
@@ -67,7 +79,7 @@ public class BookRepositoryTests {
     }
 
     @Test
-    public void 북_페이징_테스트() throws Exception
+    public void 북_페이징_테스트()
     {
         // given
         String searchBookName = "길벗";
@@ -94,18 +106,13 @@ public class BookRepositoryTests {
     }
 
     @Test
-    @Transactional
-    public void 책_초기화() throws Exception
+    public void 책_추가하기()
     {
-        for (int i = 1 ; i <= 100; i++)
+        for (int i = 1; i <= 100; i++)
         {
             Book book = new Book();
-            book.setPublisher("동아출판");
-            book.setName("이것이데이터베이스다"+i);
-            book.setCount(110 - i);
-            book.setIsbn("ABC0123DEF");
-            bookRepository.save(book);
+            book.setIsbn("V1188621270AB");
+            book.setName("");
         }
     }
-
 }

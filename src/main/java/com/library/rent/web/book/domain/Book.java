@@ -10,14 +10,21 @@ import java.util.List;
 
 @Getter
 @Setter
+@Table( indexes = {@Index(name = "isbn_idx", columnList = "isbn")},
+        uniqueConstraints = {@UniqueConstraint(name = "NAME_ISBN_UQ", columnNames = {"isbn", "name"})})
 @ToString(exclude = {"rentBooks"})
 @Entity
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name="name")
     private String name;
+
+    @Column(name="isbn")
     private String isbn;
+
     private int count;
     private String publisher;
 
@@ -26,5 +33,6 @@ public class Book {
 
     @OneToMany(mappedBy = "book")
     private List<RentBook> rentBooks;
+
 
 }
