@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @Sql("classpath:sql/book-search-test.sql")
+@Transactional
 public class BookRepositoryTests {
 
     @Autowired
@@ -39,6 +40,7 @@ public class BookRepositoryTests {
     {
         Member testMember = Member.builder()
                 .name("ADMIN")
+                .id("ADMIN")
                 .build();
         memberRepository.save(testMember);
     }
@@ -106,13 +108,17 @@ public class BookRepositoryTests {
     }
 
     @Test
+    @Transactional
     public void 책_추가하기()
     {
         for (int i = 1; i <= 100; i++)
         {
             Book book = new Book();
-            book.setIsbn("V1188621270AB");
-            book.setName("");
+            book.setIsbn("V1188621270AB" + i);
+            book.setName("Book" + i);
+            book.setCount(20);
+            book.setPublisher("바람" + i);
+            bookRepository.save(book);
         }
     }
 }

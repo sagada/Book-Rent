@@ -6,9 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Getter
@@ -16,6 +14,7 @@ import java.util.List;
 @ToString(exclude = {"rents"})
 @Entity
 public class Member {
+
     @Id
     private String id;
     private String name;
@@ -24,8 +23,9 @@ public class Member {
     private List<Rent> rents;
 
     @Builder
-    public Member(String name)
+    public Member(String id, String name)
     {
+        this.id = id;
         this.name = name;
     }
 }

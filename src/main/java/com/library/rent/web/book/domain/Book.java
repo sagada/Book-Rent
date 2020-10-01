@@ -10,8 +10,13 @@ import java.util.List;
 
 @Getter
 @Setter
-@Table( indexes = {@Index(name = "isbn_idx", columnList = "isbn")},
-        uniqueConstraints = {@UniqueConstraint(name = "NAME_ISBN_UQ", columnNames = {"isbn", "name"})})
+@Table( indexes = {
+            @Index(name = "isbn_idx", columnList = "isbn"),
+            @Index(name = "name_idx", columnList = "name")
+        },
+        uniqueConstraints = {
+            @UniqueConstraint(name = "NAME_ISBN_UQ", columnNames = {"isbn", "name"})
+        })
 @ToString(exclude = {"rentBooks"})
 @Entity
 public class Book {
@@ -33,6 +38,4 @@ public class Book {
 
     @OneToMany(mappedBy = "book")
     private List<RentBook> rentBooks;
-
-
 }
