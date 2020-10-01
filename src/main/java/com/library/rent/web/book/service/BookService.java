@@ -1,6 +1,5 @@
 package com.library.rent.web.book.service;
 
-import com.library.rent.util.page.PageRequest;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.dto.BookDto;
 import com.library.rent.web.book.repository.BookRepository;

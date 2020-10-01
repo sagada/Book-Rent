@@ -15,6 +15,6 @@ public interface BookFeignClient {
             , @RequestParam(value = "page", defaultValue = "1") int page
             , @RequestParam(value = "sort", defaultValue = "accuracy") String sort
             , @RequestParam(value = "query", required = true) String query
-            , @RequestParam(value = "target") String target);
+            , @RequestParam(value = "target", defaultValue = "title") String target);
 
 }

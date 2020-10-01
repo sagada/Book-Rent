@@ -1,14 +1,16 @@
 package com.library.rent.web.book.domain;
 
+import com.library.rent.web.rentbook.domain.RentBook;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
-@ToString
 @Setter
+@ToString(exclude = {"rentBooks"})
 @Entity
 public class Book {
     @Id
@@ -19,5 +21,10 @@ public class Book {
     private int count;
     private String publisher;
 
+    @Column(columnDefinition = "TEXT")
     private String imgUrl;
+
+    @OneToMany(mappedBy = "book")
+    private List<RentBook> rentBooks;
+
 }
