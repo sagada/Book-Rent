@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @ToString
@@ -21,4 +18,6 @@ public class Book {
     private String isbn;
     private int count;
     private String publisher;
+
+    private String imgUrl;
 }

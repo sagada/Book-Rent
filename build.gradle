@@ -2,7 +2,7 @@ buildscript {
 	ext{
 		springBootVersion = '2.1.7.RELEASE'
 		queryDslPluginVersion = '1.0.9'
-
+		springCloudVersion = 'Finchley.RELEASE'
 	}
 	repositories {
 		mavenCentral()
@@ -13,6 +13,7 @@ buildscript {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath "io.spring.gradle:dependency-management-plugin:1.0.7.RELEASE"
 		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${queryDslPluginVersion}")
+
 	}
 }
 apply plugin: 'java'
@@ -55,6 +56,13 @@ repositories {
 	mavenCentral()
 	maven { url "https://plugins.gradle.org/m2/" } // plugin 저장소
 }
+
+dependencyManagement {
+	imports {
+		mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Greenwich.RELEASE'
+	}
+}
+
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
@@ -63,7 +71,7 @@ dependencies {
 	implementation 'com.querydsl:querydsl-apt:4.1.4'
 	implementation 'com.querydsl:querydsl-jpa:4.1.4'
 	compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.0'
-
+	compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
 	implementation("com.google.guava:guava:29.0-jre")
 
 	implementation 'com.querydsl:querydsl-jpa'

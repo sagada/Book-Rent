@@ -15,7 +15,9 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -60,7 +62,7 @@ public class BookRepositoryTests {
         List<Book> bookInfos = bookRepository.getBooksAdmin(param);
 
         //then
-        assertThat(bookInfos.size()).isEqualTo(1);
+        assertThat(bookInfos.size()).isEqualTo(2);
         assertThat(bookInfos.get(0).getPublisher()).isEqualTo(publisherName);
     }
 
@@ -79,15 +81,20 @@ public class BookRepositoryTests {
         pageRequest.setSize(30);
 
         Page<Book> bookInfos = bookRepository.getBooks(param, pageRequest.of());
+        List<BookDto.BookInfo> result = bookInfos.stream()
+                .map(book -> BookDto.BookInfo.builder()
+                        .count(book.getCount())
+                        .isbn(book.getIsbn())
+                        .publisher(book.getPublisher())
+                        .name(book.getName())
+                        .build())
+                .collect(Collectors.toList());
 
-        for (Book book : bookInfos)
-        {
-            System.out.println(book);
-        }
+        assertThat(result.size()).isEqualTo(30);
     }
 
     @Test
-    @Commit
+    @Transactional
     public void 책_초기화() throws Exception
     {
         for (int i = 1 ; i <= 100; i++)

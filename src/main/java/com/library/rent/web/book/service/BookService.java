@@ -28,8 +28,11 @@ public class BookService {
         return null;
     }
 
-    public List<BookDto.BookInfo> getBooks(Pageable pageable, BookDto.SearchBooksParam param) {
+    public List<BookDto.BookInfo> getBooks(Pageable pageable, BookDto.SearchBooksParam param)
+    {
+
         Page<Book> books =  bookRepository.getBooks(param, pageable);
+
         return books.stream()
                 .map(book -> BookDto.BookInfo.builder()
                                 .count(book.getCount())
