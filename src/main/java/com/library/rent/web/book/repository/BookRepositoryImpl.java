@@ -8,6 +8,7 @@ import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPQLQuery;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,7 +22,7 @@ import java.util.List;
 
 import static com.library.rent.web.book.domain.QBook.book;
 
-
+@Log4j2
 public class BookRepositoryImpl extends QuerydslRepositorySupport implements BookRepositoryCustom {
 
     @Autowired
@@ -35,7 +36,7 @@ public class BookRepositoryImpl extends QuerydslRepositorySupport implements Boo
     {
         if (ObjectUtils.isEmpty(param))
             return null;
-        QBook b = QBook.book;
+        QBook b = book;
         JPQLQuery<Book> query = from(b);
 
         return query.from(b)
@@ -49,12 +50,12 @@ public class BookRepositoryImpl extends QuerydslRepositorySupport implements Boo
     public Page<Book> getBooks(BookDto.SearchBooksParam param, Pageable pageable)
     {
 
-        QBook b = QBook.book;
+        QBook b = book;
         JPQLQuery<Book> query = from(b);
 
-        System.out.println(pageable.getPageSize());
-        System.out.println(pageable.getOffset());
-        System.out.println(pageable.getSort());
+        log.info(pageable.getPageSize());
+        log.info(pageable.getOffset());
+        log.info(pageable.getSort());
 
         PathBuilder<Book> entityPath = new PathBuilder<>(Book.class, "book");
 
@@ -85,12 +86,12 @@ public class BookRepositoryImpl extends QuerydslRepositorySupport implements Boo
     }
 
 
-    private BooleanExpression conTainsCount(int count)
+    private BooleanExpression conTainsCount(int quantity)
     {
-        if (StringUtils.isEmpty(count)) {
+        if (StringUtils.isEmpty(quantity)) {
             return null;
         }
-        return book.count.gt(count);
+        return book.quantity.gt(quantity);
     }
 
 

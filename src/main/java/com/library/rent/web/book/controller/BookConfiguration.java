@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Configuration;
 public class BookConfiguration {
 
     @Bean
-    Logger.Level feignLoggerLevel() {
+    Logger.Level feignLoggerLevel()
+    {
         return Logger.Level.FULL;
     }
 }
