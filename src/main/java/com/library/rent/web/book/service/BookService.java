@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +43,6 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
     public void setBook(List<BookDto.SetBookParam> param)
     {
         List<Book> books = param.stream().map(BookDto.SetBookParam::toEntity).collect(Collectors.toList());

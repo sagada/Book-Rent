@@ -64,6 +64,7 @@ public class BookController {
     @PostMapping("/kakao")
     public void setBook(@RequestBody List<BookDto.SetBookParam> param)
     {
+        param.forEach(s-> System.out.println("ISBN :  " + s.getIsbn()));
         bookService.setBook(param);
     }
 
