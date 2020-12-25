@@ -5,18 +5,14 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
 @Table( indexes = {
             @Index(name = "isbn_idx", columnList = "isbn"),
-            @Index(name = "name_idx", columnList = "name")
-        },
-        uniqueConstraints = {
-            @UniqueConstraint(name = "NAME_ISBN_UQ", columnNames = {"isbn", "name"})
-        })
-@ToString(exclude = {"rentBooks"})
+            @Index(name = "name_idx", columnList = "book_name")
+        }
+)
 @NoArgsConstructor
 @Entity
 @Accessors(chain = true)
@@ -25,20 +21,18 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="name")
+    @Column(name="book_name")
     private String name;
 
-    @Column(name="isbn")
     private String isbn;
 
     private int quantity;
     private String publisher;
     private String author;
-    @Column(columnDefinition = "TEXT")
+
+    @Column(columnDefinition = "TEXT", name= "img_url")
     private String imgUrl;
 
-    @OneToMany(mappedBy = "book")
-    private List<RentBook> rentBooks;
 
     @Builder
     public Book(String name, String isbn, int quantity, String publisher, String author, String imgUrl) {

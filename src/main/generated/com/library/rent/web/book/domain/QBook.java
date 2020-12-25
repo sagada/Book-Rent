@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -33,8 +32,6 @@ public class QBook extends EntityPathBase<Book> {
     public final StringPath publisher = createString("publisher");
 
     public final NumberPath<Integer> quantity = createNumber("quantity", Integer.class);
-
-    public final ListPath<com.library.rent.web.rentbook.domain.RentBook, com.library.rent.web.rentbook.domain.QRentBook> rentBooks = this.<com.library.rent.web.rentbook.domain.RentBook, com.library.rent.web.rentbook.domain.QRentBook>createList("rentBooks", com.library.rent.web.rentbook.domain.RentBook.class, com.library.rent.web.rentbook.domain.QRentBook.class, PathInits.DIRECT2);
 
     public QBook(String variable) {
         super(Book.class, forVariable(variable));

@@ -1,10 +1,12 @@
 package com.library.rent.web.book.service;
 
 import com.library.rent.web.book.repository.BookFeignClient;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
+@Log4j2
 public class BookFeignService {
 
     private final BookFeignClient feignClient;
@@ -17,10 +19,11 @@ public class BookFeignService {
 
     public String getBookFromKakaoOpenApi(int size, int page, String sort, String query, String target)
     {
-        System.out.println("query : " + query);
-        System.out.println("page :" + page);
-        System.out.println("target : " + target);
-        System.out.println("size : " + size);
+        log.debug("query : {}",query);
+        log.debug("page : {}", page);
+        log.debug("target : {}", target);
+        log.debug("size : {}", size);
+
         return feignClient.getBookFromKakaoOpenApi(size, page, sort, query, target);
     }
 }

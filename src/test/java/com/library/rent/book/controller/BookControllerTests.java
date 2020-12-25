@@ -33,7 +33,7 @@ public class BookControllerTests {
         return Lists.newArrayList(
             BookDto.SetBookParam.builder()
                     .imgUrl("https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F838090%3Ftimestamp%3D20201004143823")
-                    .count(3)
+                    .quantity(3)
                     .name("JPA")
                     .isbn("#########")
                     .publisher("테스트출판1")
@@ -42,7 +42,7 @@ public class BookControllerTests {
 
             BookDto.SetBookParam.builder()
                     .imgUrl("https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F838090%3Ftimestamp%3D20201004143823")
-                    .count(4)
+                    .quantity(4)
                     .name("JAVA")
                     .isbn("#########")
                     .publisher("테스트출판2")
@@ -51,7 +51,7 @@ public class BookControllerTests {
 
             BookDto.SetBookParam.builder()
                     .imgUrl("https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F838090%3Ftimestamp%3D20201004143823")
-                    .count(3)
+                    .quantity(3)
                     .name("SPRING")
                     .isbn("#########")
                     .publisher("테스트출판3")

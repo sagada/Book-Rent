@@ -1,6 +1,6 @@
 buildscript {
 	ext{
-		springBootVersion = '2.1.7.RELEASE'
+		springBootVersion = '2.4.1.RELEASE'
 		queryDslPluginVersion = '1.0.9'
 		springCloudVersion = 'Finchley.RELEASE'
 	}
