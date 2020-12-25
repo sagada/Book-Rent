@@ -1,6 +1,6 @@
 buildscript {
 	ext{
-		springBootVersion = '2.4.1.RELEASE'
+		springBootVersion = '2.1.7.RELEASE'
 		queryDslPluginVersion = '1.0.9'
 		springCloudVersion = 'Finchley.RELEASE'
 	}
@@ -64,6 +64,9 @@ dependencyManagement {
 }
 
 dependencies {
+	implementation 'junit:junit:4.12'
+	implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+	implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
@@ -71,7 +74,10 @@ dependencies {
 	implementation 'com.querydsl:querydsl-apt:4.1.4'
 	implementation 'com.querydsl:querydsl-jpa:4.1.4'
 	compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.0'
+
 	compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+
 	implementation("com.google.guava:guava:29.0-jre")
 
 	implementation 'com.querydsl:querydsl-jpa'
@@ -79,5 +85,8 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+test {
+	useJUnitPlatform()
 }
