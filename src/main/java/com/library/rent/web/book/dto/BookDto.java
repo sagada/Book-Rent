@@ -34,7 +34,7 @@ public class BookDto {
             this.author = author;
         }
 
-        public Book toEntity() {
+        public Book createReadyBook() {
             return Book.builder()
                     .quantity(quantity)
                     .imgUrl(imgUrl)

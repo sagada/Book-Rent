@@ -21,7 +21,7 @@ public class BookService {
 
         List<Book> books = param.getSetBookParamList()
                 .stream()
-                .map(BookDto.SetBookParam::toEntity)
+                .map(BookDto.SetBookParam::createReadyBook)
                 .collect(Collectors.toList());
 
         bookRepository.saveAll(books);
