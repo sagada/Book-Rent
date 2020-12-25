@@ -6,14 +6,12 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/book")
 @Log4j2
 public class BookController {
-
 
     private final BookService bookService;
 
@@ -24,7 +22,7 @@ public class BookController {
     }
 
     @PostMapping("/kakao")
-    public void setBook(@RequestBody List<BookDto.SetBookParam> param)
+    public void setBook(@RequestBody BookDto.SetBookDto param)
     {
         bookService.setBook(param);
     }

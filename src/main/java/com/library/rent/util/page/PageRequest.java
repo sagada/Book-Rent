@@ -24,7 +24,6 @@ public final class PageRequest {
     {
         this.direction = direction;
     }
-    // getter
 
     public org.springframework.data.domain.PageRequest of()
     {

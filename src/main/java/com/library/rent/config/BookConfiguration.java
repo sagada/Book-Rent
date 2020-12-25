@@ -1,4 +1,4 @@
-package com.library.rent.web.book.controller;
+package com.library.rent.config;
 
 import feign.Logger;
 import org.springframework.context.annotation.Bean;

@@ -1,87 +1,22 @@
 package com.library.rent.web.book.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.library.rent.web.book.domain.Book;
+import com.library.rent.web.book.domain.BookStatus;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class BookDto {
 
-    private BookDto()
-    {
+    private BookDto() {
         throw new AssertionError("DTO outer class");
     }
 
     @Getter
     @Setter
-    public static class SetBooksXlsxParam
-    {
-        private Long id;
-        private String name;
-        private Long isbn;
-        private int count;
-        private String publisher;
-    }
-
-    @Getter
-    @Setter
-    @Builder
-    public static class BookInfo
-    {
-        private Long id;
-        private String name;
-        private String isbn;
-        private int count;
-        private String publisher;
-
-    }
-
-    @Setter
-    @Getter
     @NoArgsConstructor
-    public static class SearchBooksParam
-    {
-        private String name;
-        private String isbn;
-        private int count = 0;
-        private String publisher;
-
-        @Builder
-        public SearchBooksParam(String name, String isbn, int count, String publisher)
-        {
-            this.name = name;
-            this.isbn = isbn;
-            this.count = count;
-            this.publisher = publisher;
-        }
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class BookQuantityResponse
-    {
-        private String isbn;
-        private int quantity;
-
-        @Builder
-        public BookQuantityResponse(String isbn, int quantity) {
-            this.isbn = isbn;
-            this.quantity = quantity;
-        }
-
-        public static BookQuantityResponse createEmptyResponse(String isbn)
-        {
-            return BookQuantityResponse.builder().isbn(isbn).quantity(0).build();
-        }
-    }
-
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    public static class SetBookParam
-    {
+    public static class SetBookParam {
         private String name;
         private String publisher;
         private String isbn;
@@ -99,8 +34,7 @@ public class BookDto {
             this.author = author;
         }
 
-        public Book toEntity()
-        {
+        public Book toEntity() {
             return Book.builder()
                     .quantity(quantity)
                     .imgUrl(imgUrl)
@@ -108,10 +42,24 @@ public class BookDto {
                     .name(name)
                     .publisher(publisher)
                     .author(author)
+                    .bookStatus(BookStatus.WAIT)
                     .build();
         }
-
     }
 
 
+    @Getter
+    @Setter
+    public static class SetBookDto {
+        List<SetBookParam> setBookParamList = new ArrayList<>();
+
+        public void validate() {
+            setBookParamList.forEach(bookParam ->
+            {
+                if (bookParam.getIsbn() == null || bookParam.getName() == null || bookParam.getQuantity() == 0) {
+                    throw new IllegalStateException("Error Parameter");
+                }
+            });
+        }
+    }
 }
