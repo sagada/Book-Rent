@@ -12,7 +12,7 @@ buildscript {
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath "io.spring.gradle:dependency-management-plugin:1.0.7.RELEASE"
-		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${queryDslPluginVersion}")
+//		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${queryDslPluginVersion}")
 
 	}
 }
@@ -24,33 +24,33 @@ group 'com.library.rent'
 version '1.0-SNAPSHOT'
 
 // querydsl 적용
-apply plugin: "com.ewerk.gradle.plugins.querydsl" // Plugin 적용
+//apply plugin: "com.ewerk.gradle.plugins.querydsl" // Plugin 적용
 sourceCompatibility = 1.8
-def querydslSrcDir = 'src/main/generated'
+//def querydslSrcDir = 'src/main/generated'
 
 
-querydsl {
-	library = "com.querydsl:querydsl-apt"
-	jpa = true
-	querydslSourcesDir = querydslSrcDir
-	querydslDefault = true
-}
+//querydsl {
+//	library = "com.querydsl:querydsl-apt"
+//	jpa = true
+//	querydslSourcesDir = querydslSrcDir
+//	querydslDefault = true
+//}
 
-sourceSets {
-	main {
-		java {
-			srcDirs = ['src/main/java', querydslSrcDir]
-		}
-	}
-}
+//sourceSets {
+//	main {
+//		java {
+//			srcDirs = ['src/main/java', querydslSrcDir]
+//		}
+//	}
+//}
 
-compileQuerydsl{
-	options.annotationProcessorPath = configurations.querydsl
-}
-
-configurations {
-	querydsl.extendsFrom compileClasspath
-}
+//compileQuerydsl{
+//	options.annotationProcessorPath = configurations.querydsl
+//}
+//
+//configurations {
+//	querydsl.extendsFrom compileClasspath
+//}
 
 repositories {
 	mavenCentral()
@@ -71,8 +71,8 @@ dependencies {
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 
-	implementation 'com.querydsl:querydsl-apt:4.1.4'
-	implementation 'com.querydsl:querydsl-jpa:4.1.4'
+//	implementation 'com.querydsl:querydsl-apt:4.1.4'
+//	implementation 'com.querydsl:querydsl-jpa:4.1.4'
 
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7'
 
@@ -83,7 +83,7 @@ dependencies {
 
 	implementation("com.google.guava:guava:29.0-jre")
 
-	implementation 'com.querydsl:querydsl-jpa'
+//	implementation 'com.querydsl:querydsl-jpa'
 	compile('org.projectlombok:lombok')
 	annotationProcessor 'org.projectlombok:lombok'
 	runtimeOnly 'mysql:mysql-connector-java'
