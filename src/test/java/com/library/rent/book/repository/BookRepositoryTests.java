@@ -26,8 +26,12 @@ public class BookRepositoryTests {
         String bookName = "JPA";
         Book book = new Book(bookName);
         Book savedBook = bookRepository.save(book);
+
+        System.out.println(savedBook);
         assertThat(savedBook).isEqualTo(book);
         assertThat(savedBook.getName()).isEqualTo(bookName);
-        assertThat(savedBook.getRegDt()).isNotNull();
+
+        System.out.println("createdDate = " + book.getCreatedDate());
+        System.out.println("updatedDate = " + book.getLastModifiedDate());
     }
 }

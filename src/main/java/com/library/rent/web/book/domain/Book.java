@@ -1,17 +1,19 @@
 package com.library.rent.web.book.domain;
 
+import com.library.rent.web.BaseEntity;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
-@Table( indexes = {@Index(name = "isbn_idx", columnList = "isbn"), @Index(name = "name_idx", columnList = "book_name")})
+@Table( indexes = {
+        @Index(name = "isbn_idx", columnList = "isbn"),
+        @Index(name = "name_idx", columnList = "book_name")
+})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"name", "isbn", "publisher", "quantity", "bookStatus"})
 @Entity
-public class Book {
+public class Book extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,6 +21,7 @@ public class Book {
     @Column(name="book_name")
     private String name;
 
+    @Column(unique = true)
     private String isbn;
 
     private int quantity;
@@ -30,14 +33,6 @@ public class Book {
 
     @Enumerated(EnumType.STRING)
     private BookStatus bookStatus;
-
-    @Column(name = "reg_dt")
-    @CreationTimestamp
-    private LocalDateTime regDt;
-
-    @UpdateTimestamp
-    @Column(name = "chg_dt")
-    private LocalDateTime chgDt;
 
     public Book(String name) {
         this.name = name;

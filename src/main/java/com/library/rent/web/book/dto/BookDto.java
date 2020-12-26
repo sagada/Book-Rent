@@ -4,6 +4,11 @@ import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
 import lombok.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,10 +22,20 @@ public class BookDto {
     @Setter
     @NoArgsConstructor
     public static class SetBookParam {
+
+        @NotBlank(message = "책 이름은 필수 값 입니다.")
         private String name;
+
+        @NotBlank(message = "책 출판사는 필수 값 입니다.")
         private String publisher;
+
+        @NotBlank(message = "isbn은 필수 값 입니다.")
         private String isbn;
+
+        @Min(1)
         private int quantity;
+
+        @NotBlank(message = "썸네일은 필수 값 입니다.")
         private String imgUrl;
         private String author;
 
@@ -51,15 +66,8 @@ public class BookDto {
     @Getter
     @Setter
     public static class SetBookDto {
-        List<SetBookParam> setBookParamList = new ArrayList<>();
-
-        public void validate() {
-            setBookParamList.forEach(bookParam ->
-            {
-                if (bookParam.getIsbn() == null || bookParam.getName() == null || bookParam.getQuantity() == 0) {
-                    throw new IllegalStateException("Error Parameter");
-                }
-            });
-        }
+        @NotEmpty
+        List<@Valid SetBookParam> setBookParamList = new ArrayList<>();
     }
+
 }

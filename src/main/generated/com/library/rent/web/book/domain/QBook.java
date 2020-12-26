@@ -19,11 +19,14 @@ public class QBook extends EntityPathBase<Book> {
 
     public static final QBook book = new QBook("book");
 
+    public final com.library.rent.web.QBaseEntity _super = new com.library.rent.web.QBaseEntity(this);
+
     public final StringPath author = createString("author");
 
     public final EnumPath<BookStatus> bookStatus = createEnum("bookStatus", BookStatus.class);
 
-    public final DateTimePath<java.time.LocalDateTime> chgDt = createDateTime("chgDt", java.time.LocalDateTime.class);
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -31,13 +34,14 @@ public class QBook extends EntityPathBase<Book> {
 
     public final StringPath isbn = createString("isbn");
 
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastModifiedDate = _super.lastModifiedDate;
+
     public final StringPath name = createString("name");
 
     public final StringPath publisher = createString("publisher");
 
     public final NumberPath<Integer> quantity = createNumber("quantity", Integer.class);
-
-    public final DateTimePath<java.time.LocalDateTime> regDt = createDateTime("regDt", java.time.LocalDateTime.class);
 
     public QBook(String variable) {
         super(Book.class, forVariable(variable));
