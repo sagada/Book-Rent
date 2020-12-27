@@ -1,0 +1,37 @@
+spring:
+  datasource:
+    username: root
+    password: root1234
+    url: jdbc:mysql://localhost:3306/book_toy?useSSL=false&serverTimezone=Asia/Seoul
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    database: mysql
+    properties:
+      hibername:
+        format_sql: true
+    hibernate:
+      ddl-auto: create
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+
+
+kakao:
+  appkey: 91dcd7285ece2c9d52ad39b2f3f30137
+  book:
+    search:
+      url: https://dapi.kakao.com/v3/search
+
+feign:
+  client:
+    config:
+      feignName:
+        loggerLevel: FULL
+
+logging:
+  level:
+    org:
+      hibernate: info
+      springframework:
+        web: info
+        security: debug
