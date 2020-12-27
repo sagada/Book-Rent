@@ -47,13 +47,12 @@ public class GlobalExceptionHandler {
                 , HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(GlobalApiExcpetion.class)
-    public ResponseEntity<ErrorResponse> handleGlobalApiException(GlobalApiExcpetion ex)
+    @ExceptionHandler(GlobalApiException.class)
+    public ResponseEntity<ErrorResponse> handleGlobalApiException(GlobalApiException ex)
     {
         log.error("GlobalExceptionHandler.handleGlobalApiException ", ex);
-        return new ResponseEntity<>
-                (
-                    new ErrorResponse(ex.getMessage(), "ApiException", HttpStatus.INTERNAL_SERVER_ERROR.value())
+        return new ResponseEntity<>(
+                    new ErrorResponse(ex.getMessage(), ex.getContent(), HttpStatus.INTERNAL_SERVER_ERROR.value())
                     , HttpStatus.INTERNAL_SERVER_ERROR
                 );
     }

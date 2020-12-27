@@ -4,7 +4,7 @@ import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.dto.BookDto;
 import com.library.rent.web.book.repository.BookRepository;
 import com.library.rent.web.exception.ErrorCode;
-import com.library.rent.web.exception.GlobalApiExcpetion;
+import com.library.rent.web.exception.GlobalApiException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,13 @@ public class BookService {
 
         if (!CollectionUtils.isEmpty(findBooksByInputIsbnList))
         {
-            throw new GlobalApiExcpetion(ErrorCode.DUPLICATE_BOOK);
+            // 중복 되는 책들의 이름을 ErrorResponse 에 넘겨준다.
+            String detailMessage = findBooksByInputIsbnList
+                    .stream()
+                    .map(Book::getName)
+                    .collect(Collectors.joining(",\n"));
+
+            throw new GlobalApiException(ErrorCode.DUPLICATE_BOOK, detailMessage);
         }
     }
 }

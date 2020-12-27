@@ -2,14 +2,12 @@ package com.library.rent.web.exception;
 
 import lombok.*;
 
-import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class ErrorResponse {
 
-    private static final String DUPLICATE_DATA = "Duplicate Data";
     private int statusCode;
     private String message;
     private String content;
@@ -26,4 +24,5 @@ public class ErrorResponse {
         this.message = message;
         this.content = content;
     }
+
 }

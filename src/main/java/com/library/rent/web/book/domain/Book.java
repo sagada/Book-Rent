@@ -34,11 +34,13 @@ public class Book extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private BookStatus bookStatus;
 
-    public Book(String name) {
+    public Book(String name)
+    {
         this.name = name;
     }
 
-    public void setIsbn(String isbn) {
+    public void setIsbn(String isbn)
+    {
         this.isbn = isbn;
     }
 
@@ -58,10 +60,6 @@ public class Book extends BaseEntity {
         this.publisher = publisher;
         this.author = author;
         this.imgUrl = imgUrl;
-        this.bookStatus = bookStatus;
-    }
-
-    public void setBookStatus(BookStatus bookStatus) {
         this.bookStatus = bookStatus;
     }
 

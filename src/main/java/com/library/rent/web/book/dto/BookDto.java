@@ -61,7 +61,6 @@ public class BookDto {
         }
     }
 
-
     @Getter
     @Setter
     public static class SetBookDto {

@@ -3,12 +3,14 @@ package com.library.rent.web.exception;
 import lombok.Getter;
 
 @Getter
-public class GlobalApiExcpetion extends RuntimeException{
+public class GlobalApiException extends RuntimeException{
 
     private final String mesaage;
-    public GlobalApiExcpetion(ErrorCode errorCode)
+    private final String content;
+    public GlobalApiException(ErrorCode errorCode, String content)
     {
         super(errorCode.getMessage());
         this.mesaage = errorCode.getMessage();
+        this.content = content;
     }
 }
