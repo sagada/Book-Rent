@@ -31,7 +31,7 @@ public class BookDto {
         @NotBlank(message = "isbn은 필수 값 입니다.")
         private String isbn;
 
-        @Min(1)
+        @Min(value = 1, message = "최소 수량은 1개 입니다.")
         private int quantity;
 
         @NotBlank(message = "썸네일은 필수 값 입니다.")

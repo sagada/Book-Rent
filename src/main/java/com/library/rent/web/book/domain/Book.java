@@ -38,6 +38,10 @@ public class Book extends BaseEntity {
         this.name = name;
     }
 
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
     @Builder
     public Book(
             String name

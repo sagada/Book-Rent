@@ -1,7 +1,5 @@
-package com.library.rent.web;
+package com.library.rent.web.exception;
 
-import com.library.rent.web.exception.DuplicateBookException;
-import com.library.rent.web.exception.ErrorBody;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,24 +12,25 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @Log4j2
 @RestControllerAdvice(annotations = RestController.class)
-public class ApiExceptionHandler{
+public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateBookException.class)
-    public ResponseEntity<ErrorBody> handleDuplicateException(DuplicateBookException ex)
+    public ResponseEntity<ErrorResponse> handleDuplicateException(DuplicateBookException ex)
     {
-        log.error("DuplicateBookException : {}", ex.getLocalizedMessage());
+        log.error("GlobalExceptionHandler.handleDuplicateException " , ex);
 
-        ErrorBody errorBody = new ErrorBody();
-        errorBody.setHttpStatus(HttpStatus.BAD_REQUEST);
+        ErrorResponse errorBody = new ErrorResponse();
+        errorBody.setStatusCode(HttpStatus.BAD_REQUEST.value());
         errorBody.setMessage(ex.getMessage());
 
         return ResponseEntity.badRequest().body(errorBody);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorBody> handleMethodArgumentNotValid(MethodArgumentNotValidException ex)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex)
     {
-        log.error("MethodArgumentNotValidException : {}", ex.getLocalizedMessage());
+        log.error("GlobalExceptionHandler.MethodArgumentNotValidException ", ex);
+
         BindingResult bindingResult = ex.getBindingResult();
 
         StringBuilder builder = new StringBuilder();
@@ -43,12 +42,19 @@ public class ApiExceptionHandler{
             builder.append(fieldError.getDefaultMessage());
         }
 
-        ErrorBody errorBody = new ErrorBody();
-        errorBody.setHttpStatus(HttpStatus.BAD_REQUEST);
-        errorBody.setMessage(ex.getMessage());
-        errorBody.setContent(builder.toString());
-
-        return ResponseEntity.badRequest().body(errorBody);
+        return new ResponseEntity<>(
+                new ErrorResponse(ex.getMessage(), builder.toString(), HttpStatus.BAD_REQUEST.value())
+                , HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(GlobalApiExcpetion.class)
+    public ResponseEntity<ErrorResponse> handleGlobalApiException(GlobalApiExcpetion ex)
+    {
+        log.error("GlobalExceptionHandler.handleGlobalApiException ", ex);
+        return new ResponseEntity<>
+                (
+                    new ErrorResponse(ex.getMessage(), "ApiException", HttpStatus.INTERNAL_SERVER_ERROR.value())
+                    , HttpStatus.INTERNAL_SERVER_ERROR
+                );
+    }
 }

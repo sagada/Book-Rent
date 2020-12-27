@@ -3,22 +3,25 @@ package com.library.rent.web.book.service;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.dto.BookDto;
 import com.library.rent.web.book.repository.BookRepository;
-import com.library.rent.web.exception.DuplicateBookException;
+import com.library.rent.web.exception.ErrorCode;
+import com.library.rent.web.exception.GlobalApiExcpetion;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.Valid;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
 public class BookService {
 
     private final BookRepository bookRepository;
 
+    @Transactional
     public void setBook(@Valid BookDto.SetBookDto param)
     {
         setBookValidate(param);
@@ -31,23 +34,18 @@ public class BookService {
         bookRepository.saveAll(books);
     }
 
-    private void setBookValidate(BookDto.SetBookDto param) {
-        List<Book> originBooks = bookRepository.findAll();
-
-        List<String> isbns = originBooks.stream()
-                .map(Book::getIsbn)
+    private void setBookValidate(BookDto.SetBookDto param)
+    {
+        List<String> inputIsbnList = param.getSetBookParamList()
+                .stream()
+                .map(BookDto.SetBookParam::getIsbn)
                 .collect(Collectors.toList());
 
-        Map<String, Boolean> isbnMaps = new HashMap<>();
-        isbns.forEach(s-> isbnMaps.put(s, true));
+        List<Book> findBooksByInputIsbnList = bookRepository.findBooksByIsbnIn(inputIsbnList);
 
-        for (BookDto.SetBookParam setBook : param.getSetBookParamList())
+        if (!CollectionUtils.isEmpty(findBooksByInputIsbnList))
         {
-            if (isbnMaps.containsKey(setBook.getIsbn()))
-            {
-                throw new DuplicateBookException("등록 되어 있는 책입니다.");
-            }
+            throw new GlobalApiExcpetion(ErrorCode.DUPLICATE_BOOK);
         }
     }
-
 }
