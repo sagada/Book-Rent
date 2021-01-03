@@ -2,15 +2,22 @@ package com.library.rent.web.book.service;
 
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.dto.BookDto;
+import com.library.rent.web.book.dto.BookSearchRequest;
+import com.library.rent.web.book.dto.SaveBookResponse;
 import com.library.rent.web.book.repository.BookRepository;
 import com.library.rent.web.exception.ErrorCode;
 import com.library.rent.web.exception.GlobalApiException;
+import com.library.rent.web.order.Order;
+import com.library.rent.web.order.OrderBook;
+import com.library.rent.web.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,38 +27,61 @@ import java.util.stream.Collectors;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final OrderRepository orderRepository;
 
-    @Transactional
-    public void setBook(@Valid BookDto.SetBookDto param)
-    {
-        setBookValidate(param);
+    public ResponseEntity<Page<SaveBookResponse>> getSavedBook(BookSearchRequest bookSearchRequest) {
 
-        List<Book> books = param.getSetBookParamList()
-                .stream()
-                .map(BookDto.SetBookParam::createReadyBook)
-                .collect(Collectors.toList());
+        Page<SaveBookResponse> saveBookResponses = bookRepository.searchBookWithPaging(bookSearchRequest);
 
-        bookRepository.saveAll(books);
+        return new ResponseEntity<>(saveBookResponses, HttpStatus.OK);
     }
 
-    private void setBookValidate(BookDto.SetBookDto param)
+    @Transactional
+    public void orderBook(BookDto.SetBookDto param)
     {
-        List<String> inputIsbnList = param.getSetBookParamList()
-                .stream()
-                .map(BookDto.SetBookParam::getIsbn)
+        checkDuplicateIsbns(param);
+        List<Book> books = createBook(param);
+
+        List<OrderBook> orderBooks = createOrderBookList(books);
+
+        Order order = Order.createOrder(orderBooks);
+        orderRepository.save(order);
+    }
+
+    private List<OrderBook> createOrderBookList(List<Book> books)
+    {
+        return books.stream()
+                .map(book -> OrderBook.createOrderBook(book, book.getQuantity()))
                 .collect(Collectors.toList());
+    }
 
-        List<Book> findBooksByInputIsbnList = bookRepository.findBooksByIsbnIn(inputIsbnList);
+    private void checkDuplicateIsbns(BookDto.SetBookDto param)
+    {
+        List<String> isbnList = getIsbnList(param);
+        List<Book> findBookByIsbnList = bookRepository.findBooksByIsbnIn(isbnList);
 
-        if (!CollectionUtils.isEmpty(findBooksByInputIsbnList))
+        if (!CollectionUtils.isEmpty(findBookByIsbnList))
         {
-            // 중복 되는 책들의 이름을 ErrorResponse 에 넘겨준다.
-            String detailMessage = findBooksByInputIsbnList
+            String errorBookList = findBookByIsbnList
                     .stream()
                     .map(Book::getName)
                     .collect(Collectors.joining(",\n"));
 
-            throw new GlobalApiException(ErrorCode.DUPLICATE_BOOK, detailMessage);
+            throw new GlobalApiException(ErrorCode.DUPLICATE_BOOK, errorBookList);
         }
+    }
+
+    private List<String> getIsbnList(BookDto.SetBookDto param)
+    {
+        return param.getSetBookParamList().stream()
+                .map(BookDto.SetBookParam::getIsbn)
+                .collect(Collectors.toList());
+    }
+
+    private List<Book> createBook(BookDto.SetBookDto param)
+    {
+        return param.getSetBookParamList().stream()
+                .map(BookDto.SetBookParam::createReadyBook)
+                .collect(Collectors.toList());
     }
 }

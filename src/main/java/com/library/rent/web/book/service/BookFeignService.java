@@ -19,11 +19,6 @@ public class BookFeignService {
 
     public String getBookFromKakaoOpenApi(int size, int page, String sort, String query, String target)
     {
-        log.debug("query : {}",query);
-        log.debug("page : {}", page);
-        log.debug("target : {}", target);
-        log.debug("size : {}", size);
-
         return feignClient.getBookFromKakaoOpenApi(size, page, sort, query, target);
     }
 }

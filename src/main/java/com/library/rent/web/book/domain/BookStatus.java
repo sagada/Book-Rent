@@ -4,9 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum BookStatus {
+    ALL("ALL", "전체"),
     WAIT("WAIT", "입고대기"),
-    READY("READY", "대여가능"),
-    RENT("RENT", "대여중");
+    COMP("COMP", "렌탈가능"),
+    RENT("RENT", "렌탈중");
 
     private String name;
     private String explain;

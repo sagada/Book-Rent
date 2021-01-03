@@ -1,113 +1,133 @@
-//package com.library.rent.web.book.repository;
-//
-//import com.library.rent.web.book.domain.Book;
-//import com.library.rent.web.book.domain.QBook;
-//import com.library.rent.web.book.dto.BookDto;
-//import com.querydsl.core.QueryResults;
-//import com.querydsl.core.types.OrderSpecifier;
-//import com.querydsl.core.types.dsl.BooleanExpression;
-//import com.querydsl.core.types.dsl.PathBuilder;
-//import com.querydsl.jpa.JPQLQuery;
-//import lombok.extern.log4j.Log4j2;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.domain.Page;
-//import org.springframework.data.domain.PageImpl;
-//import org.springframework.data.domain.Pageable;
-//import org.springframework.data.domain.Sort;
-//import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
-//import org.springframework.util.ObjectUtils;
-//import org.springframework.util.StringUtils;
-//
-//import java.util.List;
-//
-//import static com.library.rent.web.book.domain.QBook.book;
-//
-//@Log4j2
-//public class BookRepositoryImpl extends QuerydslRepositorySupport implements BookRepositoryCustom {
-//
-//    @Autowired
-//    public BookRepositoryImpl()
-//    {
-//        super(Book.class);
-//    }
-//
-//    @Override
-//    public List<Book> getBooksAdmin(BookDto.SearchBooksParam param)
-//    {
-//        if (ObjectUtils.isEmpty(param))
-//            return null;
-//        QBook b = book;
-//        JPQLQuery<Book> query = from(b);
-//
-//        return query.from(b)
-//                .where(conTainsName(param.getName()),
-//                       conTainsIsbn(param.getIsbn()),
-//                       conTainsPublisher(param.getPublisher()))
-//                .fetch();
-//    }
-//
-//    @Override
-//    public Page<Book> getBooks(BookDto.SearchBooksParam param, Pageable pageable)
-//    {
-//
-//        QBook b = book;
-//        JPQLQuery<Book> query = from(b);
-//
-//        log.info(pageable.getPageSize());
-//        log.info(pageable.getOffset());
-//        log.info(pageable.getSort());
-//
-//        PathBuilder<Book> entityPath = new PathBuilder<>(Book.class, "book");
-//
-//        for (Sort.Order order : pageable.getSort()) {
-//            PathBuilder<Object> path = entityPath.get(order.getProperty());
-//            query.orderBy(new OrderSpecifier(com.querydsl.core.types.Order.valueOf(order.getDirection().name()), path));
-//        }
-//
-//        QueryResults<Book> results = query.from(b)
-//                .where(conTainsName(param.getName()),
-//                        conTainsIsbn(param.getIsbn()),
-//                        conTainsCount(param.getCount()),
-//                        conTainsPublisher(param.getPublisher()))
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetchResults();
-//
-//
-//        return new PageImpl<>(results.getResults(), pageable, results.getTotal());
-//    }
-//
-//    private BooleanExpression conTainsName(String name)
-//    {
-//        if (StringUtils.isEmpty(name)) {
-//            return null;
-//        }
-//        return book.name.contains(name);
-//    }
-//
-//
-//    private BooleanExpression conTainsCount(int quantity)
-//    {
-//        if (StringUtils.isEmpty(quantity)) {
-//            return null;
-//        }
-//        return book.quantity.gt(quantity);
-//    }
-//
-//
-//    private BooleanExpression conTainsIsbn(String isbn)
-//    {
-//        if (StringUtils.isEmpty(isbn)) {
-//            return null;
-//        }
-//        return book.isbn.contains(isbn);
-//    }
-//
-//    private BooleanExpression conTainsPublisher(String publisher)
-//    {
-//        if (StringUtils.isEmpty(publisher)) {
-//            return null;
-//        }
-//        return book.publisher.contains(publisher);
-//    }
-//}
+package com.library.rent.web.book.repository;
+
+import com.library.rent.web.book.domain.Book;
+import com.library.rent.web.book.domain.BookSearchType;
+import com.library.rent.web.book.domain.BookStatus;
+import com.library.rent.web.book.domain.QBook;
+import com.library.rent.web.book.dto.BookSearchCondition;
+import com.library.rent.web.book.dto.BookSearchRequest;
+import com.library.rent.web.book.dto.SaveBookResponse;
+import com.library.rent.web.order.QOrderBook;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
+import javax.persistence.EntityManager;
+
+
+import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import static com.library.rent.web.book.domain.QBook.book;
+import static com.library.rent.web.order.QOrderBook.orderBook;
+
+
+public class BookRepositoryImpl implements BookRepositoryCustom {
+
+    private final JPAQueryFactory queryFactory;
+
+    public BookRepositoryImpl(EntityManager entityManager)
+    {
+        this.queryFactory = new JPAQueryFactory(entityManager);
+    }
+
+    @Override
+    public Page<SaveBookResponse> searchBookWithPaging(BookSearchRequest request) {
+
+        PageRequest pageable = PageRequest.of(request.getPage(), request.getSize());
+
+        QueryResults<SaveBookResponse> results = queryFactory
+                .select(
+                        Projections.constructor(SaveBookResponse.class,
+                                book.name.as("book_name"), book.isbn, book.imgUrl, book.publisher, book.author, book.bookStatus, orderBook.order.id)
+                ).from(book)
+                .innerJoin(book.orderBookList, orderBook)
+                .where(
+                        searchEq(request.getSearch(), request.getBookSearchType()),
+                        statusEq(request.getBookStatus()),
+                        startGoe(request.getStartAt()),
+                        endLoe(request.getEndAt())
+                )
+                .offset(getSearchSaveBookOffset(pageable))
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        return new PageImpl<>(results.getResults(), pageable, results.getTotal());
+    }
+
+    private int getSearchSaveBookOffset(Pageable pageable)
+    {
+        if (pageable == null)
+        {
+            return 0;
+        }
+        return pageable.getPageNumber() * pageable.getPageSize();
+    }
+
+    private BooleanExpression endLoe(LocalDateTime endAt)
+    {
+        return endAt != null ? book.createdDate.loe(endAt) : null;
+    }
+
+
+    private BooleanExpression startGoe(LocalDateTime startAt)
+    {
+        return startAt != null ? book.createdDate.goe(startAt) : null;
+    }
+
+    private BooleanExpression statusEq(BookStatus bookStatus)
+    {
+        if (bookStatus == BookStatus.ALL)
+            return null;
+
+        return bookStatus != null ? book.bookStatus.eq(bookStatus) : null;
+    }
+
+    private BooleanExpression searchEq(String search, BookSearchType searchType)
+    {
+        if (search == null || searchType == null)
+            return null;
+        switch (searchType.getNm())
+        {
+            case "TITLE":
+                return book.name.contains(search);
+            case "AUTHOR":
+                return book.author.contains(search);
+            case "PUBLISHER":
+                return book.publisher.contains(search);
+            case "ISBN":
+                return book.isbn.eq(search);
+            default:
+                break;
+        }
+
+        return null;
+    }
+
+    private Predicate bookAuthorEq(String author)
+    {
+        return author != null ? book.author.eq(author) : null;
+    }
+
+    private BooleanExpression bookPublisherEq(String publisher)
+    {
+        return publisher != null ? book.publisher.eq(publisher) : null;
+    }
+
+    private BooleanExpression bookIsbnEq(String isbn)
+    {
+        return isbn != null ? book.isbn.eq(isbn) : null;
+    }
+
+    private BooleanExpression bookNameEq(String name)
+    {
+        return name != null ? book.name.contains(name) : null;
+    }
+}

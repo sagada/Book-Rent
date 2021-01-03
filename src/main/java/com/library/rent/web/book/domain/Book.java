@@ -1,21 +1,25 @@
 package com.library.rent.web.book.domain;
 
 import com.library.rent.web.BaseEntity;
+import com.library.rent.web.order.OrderBook;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Table( indexes = {
         @Index(name = "isbn_idx", columnList = "isbn"),
         @Index(name = "name_idx", columnList = "book_name")
 })
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @ToString(of = {"name", "isbn", "publisher", "quantity", "bookStatus"})
 @Entity
 public class Book extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "book_id")
     private Long id;
 
     @Column(name="book_name")
@@ -34,9 +38,15 @@ public class Book extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private BookStatus bookStatus;
 
+    @OneToMany(mappedBy = "book")
+    private List<OrderBook> orderBookList = new ArrayList<>();
     public Book(String name)
     {
         this.name = name;
+    }
+
+    public void setBookStatus(BookStatus bookStatus) {
+        this.bookStatus = bookStatus;
     }
 
     public void setIsbn(String isbn)
@@ -62,5 +72,6 @@ public class Book extends BaseEntity {
         this.imgUrl = imgUrl;
         this.bookStatus = bookStatus;
     }
+
 
 }

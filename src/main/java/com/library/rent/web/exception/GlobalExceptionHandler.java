@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DuplicateBookException.class)
     public ResponseEntity<ErrorResponse> handleDuplicateException(DuplicateBookException ex)
     {
-        log.error("GlobalExceptionHandler.handleDuplicateException " , ex);
+        log.error("handleDuplicateException " , ex);
 
         ErrorResponse errorBody = new ErrorResponse();
         errorBody.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex)
     {
-        log.error("GlobalExceptionHandler.MethodArgumentNotValidException ", ex);
+        log.error("MethodArgumentNotValidException ", ex);
 
         BindingResult bindingResult = ex.getBindingResult();
 
@@ -50,10 +50,19 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(GlobalApiException.class)
     public ResponseEntity<ErrorResponse> handleGlobalApiException(GlobalApiException ex)
     {
-        log.error("GlobalExceptionHandler.handleGlobalApiException ", ex);
+        log.error("handleGlobalApiException ", ex);
         return new ResponseEntity<>(
                     new ErrorResponse(ex.getMessage(), ex.getContent(), HttpStatus.INTERNAL_SERVER_ERROR.value())
                     , HttpStatus.INTERNAL_SERVER_ERROR
                 );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handException(Exception ex)
+    {
+        return new ResponseEntity<>(
+                new ErrorResponse(ex.getMessage(), ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value())
+                , HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 }
