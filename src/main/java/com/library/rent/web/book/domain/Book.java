@@ -49,6 +49,10 @@ public class Book extends BaseEntity {
         this.bookStatus = bookStatus;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public void setIsbn(String isbn)
     {
         this.isbn = isbn;

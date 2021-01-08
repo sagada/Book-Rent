@@ -1,13 +1,10 @@
 package com.library.rent.web.book.repository;
 
-import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookSearchType;
 import com.library.rent.web.book.domain.BookStatus;
-import com.library.rent.web.book.domain.QBook;
-import com.library.rent.web.book.dto.BookSearchCondition;
-import com.library.rent.web.book.dto.BookSearchRequest;
-import com.library.rent.web.book.dto.SaveBookResponse;
-import com.library.rent.web.order.QOrderBook;
+import com.library.rent.web.book.dto.*;
+import com.library.rent.web.order.Order;
+import com.library.rent.web.order.QOrder;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
@@ -21,9 +18,7 @@ import org.springframework.data.domain.Pageable;
 import javax.persistence.EntityManager;
 
 
-import java.time.Clock;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import static com.library.rent.web.book.domain.QBook.book;
 import static com.library.rent.web.order.QOrderBook.orderBook;
@@ -111,7 +106,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
         return null;
     }
 
-    private Predicate bookAuthorEq(String author)
+    private BooleanExpression bookAuthorEq(String author)
     {
         return author != null ? book.author.eq(author) : null;
     }

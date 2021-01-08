@@ -9,7 +9,8 @@ spring:
     show-sql: true
     database: mysql
     properties:
-      hibername:
+      hibernate:
+        default_batch_fetch_size: 500
         format_sql: true
     hibernate:
       ddl-auto: create
