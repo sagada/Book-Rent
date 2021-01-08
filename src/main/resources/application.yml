@@ -10,8 +10,9 @@ spring:
     database: mysql
     properties:
       hibernate:
-        default_batch_fetch_size: 500
+        default_batch_fetch_size: 100
         format_sql: true
+        batch_fetch_style: dynamic
     hibernate:
       ddl-auto: create
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect

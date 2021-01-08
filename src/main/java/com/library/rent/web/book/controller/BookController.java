@@ -40,12 +40,4 @@ public class BookController {
     {
         return bookService.getSavedBook(bookSearchRequest);
     }
-
-    @GetMapping("/search/ready")
-    public ResponseEntity<Page<OrdersResponse>> getReadyBook(@Valid OrderSearchRequest bookSearchCond)
-    {
-        bookSearchCond.validate();
-        Page<OrdersResponse> readyBooks = bookService.getReadyBooks(bookSearchCond);
-        return new ResponseEntity<>(readyBooks, HttpStatus.OK);
-    }
 }

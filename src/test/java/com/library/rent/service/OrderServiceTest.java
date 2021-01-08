@@ -3,16 +3,14 @@ package com.library.rent.service;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.book.repository.BookRepository;
-import com.library.rent.web.order.Order;
-import com.library.rent.web.order.OrderBook;
+import com.library.rent.web.order.domain.Order;
+import com.library.rent.web.order.domain.OrderBook;
 import com.library.rent.web.order.dto.OrderSearchRequest;
 import com.library.rent.web.order.dto.OrdersResponse;
 import com.library.rent.web.order.repository.OrderBookRepository;
 import com.library.rent.web.order.repository.OrderRepository;
 import com.library.rent.web.order.service.OrderService;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import net.bytebuddy.asm.Advice;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Transactional
@@ -50,22 +52,16 @@ public class OrderServiceTest {
     public void init()
     {
         jpaQueryFactory = new JPAQueryFactory(entityManager);
-        for (int i = 0 ;i < 15; i++) {
-            Book newbook = new Book();
-            newbook.setBookStatus(BookStatus.WAIT);
-            newbook.setName("bookName " + i);
-            newbook.setIsbn("126163L" + i);
 
-            Book newbook2 = new Book();
-            newbook2.setBookStatus(BookStatus.WAIT);
-            newbook2.setName("bookName2 " + i);
-            newbook2.setIsbn("1223223L"+ i);
+        for (int i = 0; i < 20; i++)
+        {
+            Book firstBook  = Book.createWaitBook("firstBook"  + i, 2, "firstIsbn"  + i);
+            Book secondBook = Book.createWaitBook("secondBook" + i, 1, "secondIsbn" + i);
 
-            OrderBook orderBook1 = OrderBook.createOrderBook(newbook, 10);
-            OrderBook orderBook2 = OrderBook.createOrderBook(newbook2, 12);
-            Order order2 = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2));
-
-            orderRepository.save(order2);
+            OrderBook orderBook1 = OrderBook.createOrderBook(firstBook, 10);
+            OrderBook orderBook2 = OrderBook.createOrderBook(secondBook, 12);
+            Order newOrder = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2));
+            orderRepository.save(newOrder);
         }
 
         entityManager.flush();
@@ -75,24 +71,24 @@ public class OrderServiceTest {
     @Test
     public void orderSearchTest()
     {
+        // given
         OrderSearchRequest readyBookSearchCond =  new OrderSearchRequest();
         readyBookSearchCond.setPage(0);
         readyBookSearchCond.setSize(10);
 
+        // when
         Page<OrdersResponse> result = orderService.getReadyBooks(readyBookSearchCond);
-        for (OrdersResponse ordersResponse : result.getContent())
-        {
-            System.out.println();
-            System.out.println("ordersResponse.getOrderId() = " + ordersResponse.getOrderId());
-            System.out.println("ordersResponse.getOrderStatus() = " +  ordersResponse.getOrderStatus());
+        List<OrdersResponse.OrderBookDto> allOrderBookDtoList = result
+                .getContent()
+                .stream()
+                .map(OrdersResponse::getOrderBookDtoList)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
 
-            for (OrdersResponse.OrderBookDto orderBookDto : ordersResponse.getOrderBookDtoList())
-            {
-                System.out.println("orderBookDto Id = " + orderBookDto.getOrderBookId());
-                System.out.println("book Name = " + orderBookDto.getBookName());
-                System.out.println("book isbn = " + orderBookDto.getIsbn());
-            }
-        }
-        Assertions.assertThat(result.getSize()).isEqualTo(10);
+        // then
+        assertThat(result.getSize()).isEqualTo(10);
+        assertThat(allOrderBookDtoList.size()).isEqualTo(20);
+        assertThat(allOrderBookDtoList).extracting("bookStatus").containsOnly(BookStatus.WAIT);
+        assertThat(result.getNumber()).isEqualTo(0);
     }
 }

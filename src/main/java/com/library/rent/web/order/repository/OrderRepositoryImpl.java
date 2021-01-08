@@ -1,20 +1,20 @@
 package com.library.rent.web.order.repository;
 
+import com.library.rent.web.order.domain.QOrder;
 import com.library.rent.web.order.dto.OrderSearchRequest;
-import com.library.rent.web.order.Order;
-import com.library.rent.web.order.OrderStatus;
-import com.querydsl.core.QueryResults;
+import com.library.rent.web.order.domain.Order;
+import com.library.rent.web.order.domain.OrderStatus;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-import static com.library.rent.web.order.QOrder.*;
+import static com.library.rent.web.order.domain.QOrder.order;
 
 
 public class OrderRepositoryImpl implements OrderRepositoryCustom{
@@ -27,10 +27,11 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public Page<Order> searchReadyBookWithPaging(OrderSearchRequest cond)
+    public List<Order> searchReadyBookWithPaging(OrderSearchRequest cond)
     {
         PageRequest pageable = PageRequest.of(cond.getPage(), cond.getSize());
-        QueryResults<Order> results = queryFactory
+
+        return queryFactory
                 .selectFrom(order)
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
@@ -39,9 +40,8 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
                         orderStatusEq(cond.getOrderStatus()),
                         orderLoe(cond.getStartDt()) , orderGoe(cond.getEndDt())
                 )
-                .fetchResults();
-
-        return new PageImpl<>(results.getResults(), pageable, results.getTotal());
+                .orderBy(order.id.desc())
+                .fetch();
     }
 
     private BooleanExpression orderDateEq(LocalDateTime orderDate)

@@ -1,7 +1,7 @@
 package com.library.rent.web.book.domain;
 
 import com.library.rent.web.BaseEntity;
-import com.library.rent.web.order.OrderBook;
+import com.library.rent.web.order.domain.OrderBook;
 import lombok.*;
 
 import javax.persistence.*;
@@ -48,7 +48,10 @@ public class Book extends BaseEntity {
     public void setBookStatus(BookStatus bookStatus) {
         this.bookStatus = bookStatus;
     }
-
+    public static Book createWaitBook(String name, int quantity, String isbn)
+    {
+        return Book.builder().name(name).quantity(quantity).isbn(isbn).bookStatus(BookStatus.WAIT).build();
+    }
     public void setName(String name) {
         this.name = name;
     }
@@ -59,7 +62,7 @@ public class Book extends BaseEntity {
     }
 
     @Builder
-    public Book(
+    private Book(
             String name
             , String isbn
             , int quantity

@@ -5,16 +5,12 @@ import com.library.rent.web.book.dto.*;
 import com.library.rent.web.book.repository.BookRepository;
 import com.library.rent.web.exception.ErrorCode;
 import com.library.rent.web.exception.GlobalApiException;
-import com.library.rent.web.order.Order;
-import com.library.rent.web.order.OrderBook;
-import com.library.rent.web.order.dto.OrdersResponse;
-import com.library.rent.web.order.dto.OrderSearchRequest;
+import com.library.rent.web.order.domain.Order;
+import com.library.rent.web.order.domain.OrderBook;
 import com.library.rent.web.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -85,17 +81,5 @@ public class BookService {
         return param.getSetBookParamList().stream()
                 .map(BookDto.SetBookParam::createReadyBook)
                 .collect(Collectors.toList());
-    }
-
-    public Page<OrdersResponse> getReadyBooks(OrderSearchRequest bookSearchCond)
-    {
-        PageRequest pageable = PageRequest.of(bookSearchCond.getPage(), bookSearchCond.getSize());
-        Page<Order> orders = orderRepository.searchReadyBookWithPaging(bookSearchCond);
-        List<OrdersResponse> ordersResponses = orders.stream()
-                .map(OrdersResponse::new)
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(ordersResponses, pageable, orders.getTotalElements());
-
     }
 }

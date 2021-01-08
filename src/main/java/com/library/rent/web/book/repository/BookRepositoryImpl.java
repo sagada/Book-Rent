@@ -3,10 +3,8 @@ package com.library.rent.web.book.repository;
 import com.library.rent.web.book.domain.BookSearchType;
 import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.book.dto.*;
-import com.library.rent.web.order.Order;
-import com.library.rent.web.order.QOrder;
+import com.library.rent.web.order.domain.QOrderBook;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -21,7 +19,7 @@ import javax.persistence.EntityManager;
 import java.time.LocalDateTime;
 
 import static com.library.rent.web.book.domain.QBook.book;
-import static com.library.rent.web.order.QOrderBook.orderBook;
+import static com.library.rent.web.order.domain.QOrderBook.orderBook;
 
 
 public class BookRepositoryImpl implements BookRepositoryCustom {

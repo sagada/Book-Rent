@@ -1,6 +1,6 @@
 package com.library.rent.web.order.repository;
 
-import com.library.rent.web.order.OrderBook;
+import com.library.rent.web.order.domain.OrderBook;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

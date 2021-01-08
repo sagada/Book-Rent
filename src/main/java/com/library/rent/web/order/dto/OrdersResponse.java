@@ -1,9 +1,10 @@
 package com.library.rent.web.order.dto;
 
 import com.library.rent.web.book.domain.Book;
-import com.library.rent.web.order.Order;
-import com.library.rent.web.order.OrderBook;
-import com.library.rent.web.order.OrderStatus;
+import com.library.rent.web.book.domain.BookStatus;
+import com.library.rent.web.order.domain.Order;
+import com.library.rent.web.order.domain.OrderBook;
+import com.library.rent.web.order.domain.OrderStatus;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,6 +42,7 @@ public class OrdersResponse {
         private int quantity;
         private String isbn;
         private String author;
+        private BookStatus bookStatus;
         private String publisher;
 
         public OrderBookDto(OrderBook orderBook, Book book)
@@ -51,6 +53,7 @@ public class OrdersResponse {
             this.isbn = book.getIsbn();
             this.author = book.getAuthor();
             this.publisher = book.getPublisher();
+            this.bookStatus = book.getBookStatus();
         }
     }
 

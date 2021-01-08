@@ -1,6 +1,6 @@
 package com.library.rent.web.order.dto;
 
-import com.library.rent.web.order.OrderStatus;
+import com.library.rent.web.order.domain.OrderStatus;
 import lombok.Data;
 
 import javax.validation.constraints.Min;

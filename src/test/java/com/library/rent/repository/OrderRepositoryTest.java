@@ -4,8 +4,8 @@ import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.order.dto.OrderSearchRequest;
 import com.library.rent.web.book.repository.BookRepository;
-import com.library.rent.web.order.Order;
-import com.library.rent.web.order.OrderBook;
+import com.library.rent.web.order.domain.Order;
+import com.library.rent.web.order.domain.OrderBook;
 import com.library.rent.web.order.repository.OrderBookRepository;
 import com.library.rent.web.order.repository.OrderRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,11 +14,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -44,7 +45,7 @@ public class OrderRepositoryTest {
     public void init()
     {
         jpaQueryFactory = new JPAQueryFactory(entityManager);
-        for (int i = 0 ;i < 15; i++) {
+        for (int i = 0 ;i < 50; i++) {
             Book newbook = new Book();
             newbook.setBookStatus(BookStatus.WAIT);
             newbook.setIsbn("126163L" + i);
@@ -67,14 +68,14 @@ public class OrderRepositoryTest {
     }
 
     @Test
-    public void pagingOrderSearchTest()
+    public void getOrderListTest()
     {
         OrderSearchRequest readyBookSearchCond =  new OrderSearchRequest();
         readyBookSearchCond.setPage(0);
-        readyBookSearchCond.setSize(10);
+        readyBookSearchCond.setSize(15);
 
-        Page<Order> orders = orderRepository.searchReadyBookWithPaging(readyBookSearchCond);
+        List<Order> orders = orderRepository.searchReadyBookWithPaging(readyBookSearchCond);
 
-        assertThat(orders.getContent().size()).isEqualTo(10);
+        assertThat(orders.size()).isEqualTo(10);
     }
 }

@@ -1,4 +1,4 @@
-package com.library.rent.web.order;
+package com.library.rent.web.order.domain;
 
 import com.library.rent.web.BaseEntity;
 import com.library.rent.web.book.domain.Book;

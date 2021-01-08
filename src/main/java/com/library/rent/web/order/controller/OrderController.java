@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/order")
@@ -19,7 +21,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<Page<OrdersResponse>> getOrders(OrderSearchRequest cond)
+    public ResponseEntity<Page<OrdersResponse>> getOrders(@Valid OrderSearchRequest cond)
     {
         Page<OrdersResponse> results = orderService.getReadyBooks(cond);
 
