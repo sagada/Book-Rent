@@ -7,7 +7,6 @@ import com.library.rent.web.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,15 +22,12 @@ public class OrderService {
 
     public Page<OrdersResponse> getReadyBooks(OrderSearchRequest bookSearchCond)
     {
-        List<Order> orders = orderRepository.searchReadyBookWithPaging(bookSearchCond);
+        Page<Order> orders = orderRepository.searchReadyBookWithPaging(bookSearchCond);
 
         List<OrdersResponse> ordersResponses = orders.stream()
                 .map(OrdersResponse::new)
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(ordersResponses
-                , PageRequest.of(bookSearchCond.getPage(), bookSearchCond.getSize())
-                , orders.size());
-
+        return new PageImpl<>(ordersResponses, orders.getPageable(), orders.getTotalElements());
     }
 }

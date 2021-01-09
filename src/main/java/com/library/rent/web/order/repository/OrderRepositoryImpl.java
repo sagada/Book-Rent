@@ -4,8 +4,12 @@ import com.library.rent.web.order.domain.QOrder;
 import com.library.rent.web.order.dto.OrderSearchRequest;
 import com.library.rent.web.order.domain.Order;
 import com.library.rent.web.order.domain.OrderStatus;
+import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
@@ -27,21 +31,30 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
     }
 
     @Override
-    public List<Order> searchReadyBookWithPaging(OrderSearchRequest cond)
+    public Page<Order> searchReadyBookWithPaging(OrderSearchRequest cond)
     {
         PageRequest pageable = PageRequest.of(cond.getPage(), cond.getSize());
 
-        return queryFactory
+        QueryResults<Order> results = queryFactory
                 .selectFrom(order)
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .where(
                         orderDateEq(cond.getOrderDate()),
+                        orderIdEq(cond.getOrderId()),
                         orderStatusEq(cond.getOrderStatus()),
-                        orderLoe(cond.getStartDt()) , orderGoe(cond.getEndDt())
+                        orderLoe(cond.getStartDt()), orderGoe(cond.getEndDt())
                 )
                 .orderBy(order.id.desc())
-                .fetch();
+                .fetchResults();
+
+        return new PageImpl<>(results.getResults(), pageable, results.getTotal());
+
+    }
+
+    private BooleanExpression orderIdEq(Long orderId)
+    {
+        return orderId != null ? order.id.eq(orderId) : null;
     }
 
     private BooleanExpression orderDateEq(LocalDateTime orderDate)

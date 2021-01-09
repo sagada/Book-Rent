@@ -3,7 +3,6 @@ package com.library.rent.web.book.repository;
 import com.library.rent.web.book.domain.BookSearchType;
 import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.book.dto.*;
-import com.library.rent.web.order.domain.QOrderBook;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -50,6 +49,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
                 )
                 .offset(getSearchSaveBookOffset(pageable))
                 .limit(pageable.getPageSize())
+                .orderBy(orderBook.createdDate.desc())
                 .fetchResults();
 
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());

@@ -44,10 +44,13 @@ public class OrdersResponse {
         private String author;
         private BookStatus bookStatus;
         private String publisher;
-
+        private Long bookId;
+        private String imgUrl;
         public OrderBookDto(OrderBook orderBook, Book book)
         {
+            this.imgUrl = book.getImgUrl();
             this.orderBookId = orderBook.getId();
+            this.bookId = book.getId();
             this.bookName = book.getName();
             this.quantity = book.getQuantity();
             this.isbn = book.getIsbn();

@@ -14,7 +14,7 @@ spring:
         format_sql: true
         batch_fetch_style: dynamic
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
 
