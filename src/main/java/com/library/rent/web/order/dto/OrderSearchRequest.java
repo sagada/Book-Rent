@@ -15,13 +15,10 @@ public class OrderSearchRequest {
     private Long orderId;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime orderDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startDt;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-
     private LocalDateTime endDt;
+
     private OrderStatus orderStatus;
     @NotNull(message = "page 숫자를 입력해주세요.")
     @Min(0)

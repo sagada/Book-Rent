@@ -2,10 +2,7 @@ package com.library.rent.web.order.domain;
 
 import com.library.rent.web.BaseEntity;
 import com.library.rent.web.book.domain.Book;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 

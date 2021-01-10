@@ -1,22 +1,18 @@
 package com.library.rent.web.order.repository;
 
-import com.library.rent.web.order.domain.QOrder;
 import com.library.rent.web.order.dto.OrderSearchRequest;
 import com.library.rent.web.order.domain.Order;
 import com.library.rent.web.order.domain.OrderStatus;
 import com.querydsl.core.QueryResults;
-import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 
 import javax.persistence.EntityManager;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static com.library.rent.web.order.domain.QOrder.order;
 
@@ -40,7 +36,6 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
                 .limit(pageable.getPageSize())
                 .offset(pageable.getOffset())
                 .where(
-                        orderDateEq(cond.getOrderDate()),
                         orderIdEq(cond.getOrderId()),
                         orderStatusEq(cond.getOrderStatus()),
                         orderLoe(cond.getStartDt()), orderGoe(cond.getEndDt())
@@ -55,11 +50,6 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
     private BooleanExpression orderIdEq(Long orderId)
     {
         return orderId != null ? order.id.eq(orderId) : null;
-    }
-
-    private BooleanExpression orderDateEq(LocalDateTime orderDate)
-    {
-        return orderDate != null ? order.orderDate.eq(orderDate) : null;
     }
 
     private BooleanExpression orderStatusEq(OrderStatus orderStatus)

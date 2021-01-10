@@ -60,6 +60,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handException(Exception ex)
     {
+        log.error("Exception.class ERROR" + ex.getMessage() + ex.getLocalizedMessage());
         return new ResponseEntity<>(
                 new ErrorResponse(ex.getMessage(), ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value())
                 , HttpStatus.INTERNAL_SERVER_ERROR

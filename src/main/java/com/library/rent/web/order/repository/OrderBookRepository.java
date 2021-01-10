@@ -2,11 +2,10 @@ package com.library.rent.web.order.repository;
 
 import com.library.rent.web.order.domain.OrderBook;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
+import java.util.Optional;
+
 
 public interface OrderBookRepository extends JpaRepository<OrderBook, Long> {
-    @Query("select ob from OrderBook ob where ob.order.id =: orderId")
-    List<OrderBook> findOrderBookByOrderId(Long orderId);
+    Optional<OrderBook> findOrderBookById(Long orderBookId);
 }

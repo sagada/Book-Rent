@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -74,8 +75,8 @@ public class OrderRepositoryTest {
         readyBookSearchCond.setPage(0);
         readyBookSearchCond.setSize(15);
 
-        List<Order> orders = orderRepository.searchReadyBookWithPaging(readyBookSearchCond);
+        Page<Order> orders = orderRepository.searchReadyBookWithPaging(readyBookSearchCond);
 
-        assertThat(orders.size()).isEqualTo(10);
+        assertThat(orders.getContent().size()).isEqualTo(10);
     }
 }

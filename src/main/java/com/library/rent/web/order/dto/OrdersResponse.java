@@ -1,5 +1,6 @@
 package com.library.rent.web.order.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.order.domain.Order;
@@ -8,6 +9,7 @@ import com.library.rent.web.order.domain.OrderStatus;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,6 +21,7 @@ public class OrdersResponse {
 
     private Long orderId;
     private OrderStatus orderStatus;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime orderDate;
     private List<OrderBookDto> orderBookDtoList = new ArrayList<>();
 
