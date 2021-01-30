@@ -5,7 +5,6 @@ import com.library.rent.web.order.domain.Order;
 import org.springframework.data.domain.Page;
 
 
-
 public interface OrderRepositoryCustom {
     Page<Order> searchReadyBookWithPaging(OrderSearchRequest readyBookSearchCond);
 }

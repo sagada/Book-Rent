@@ -17,8 +17,7 @@ public class BookFeignController {
             , @RequestParam(value = "page", defaultValue = "1") int page
             , @RequestParam(value = "sort", defaultValue = "accuracy") String sort
             , @RequestParam(value = "query", required = true) String query
-            , @RequestParam(value = "target", defaultValue = "title") String target)
-    {
+            , @RequestParam(value = "target", defaultValue = "title") String target) {
         return bookFeignService.getBookFromKakaoOpenApi(size, page, sort, query, target);
     }
 }

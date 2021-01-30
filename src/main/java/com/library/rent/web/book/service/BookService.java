@@ -35,8 +35,7 @@ public class BookService {
     }
 
     @Transactional
-    public void orderBook(BookDto.SetBookDto param)
-    {
+    public void orderBook(BookDto.SetBookDto param) {
         checkDuplicateIsbns(param);
         List<Book> books = createBook(param);
 
@@ -46,20 +45,17 @@ public class BookService {
         orderRepository.save(order);
     }
 
-    private List<OrderBook> createOrderBookList(List<Book> books)
-    {
+    private List<OrderBook> createOrderBookList(List<Book> books) {
         return books.stream()
                 .map(book -> OrderBook.createOrderBook(book, book.getQuantity()))
                 .collect(Collectors.toList());
     }
 
-    private void checkDuplicateIsbns(BookDto.SetBookDto param)
-    {
+    private void checkDuplicateIsbns(BookDto.SetBookDto param) {
         List<String> isbnList = getIsbnList(param);
         List<Book> findBookByIsbnList = bookRepository.findBooksByIsbnIn(isbnList);
 
-        if (!CollectionUtils.isEmpty(findBookByIsbnList))
-        {
+        if (!CollectionUtils.isEmpty(findBookByIsbnList)) {
             String errorBookList = findBookByIsbnList
                     .stream()
                     .map(Book::getName)
@@ -69,15 +65,13 @@ public class BookService {
         }
     }
 
-    private List<String> getIsbnList(BookDto.SetBookDto param)
-    {
+    private List<String> getIsbnList(BookDto.SetBookDto param) {
         return param.getSetBookParamList().stream()
                 .map(BookDto.SetBookParam::getIsbn)
                 .collect(Collectors.toList());
     }
 
-    private List<Book> createBook(BookDto.SetBookDto param)
-    {
+    private List<Book> createBook(BookDto.SetBookDto param) {
         return param.getSetBookParamList().stream()
                 .map(BookDto.SetBookParam::createReadyBook)
                 .collect(Collectors.toList());

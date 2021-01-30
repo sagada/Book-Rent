@@ -4,7 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum OrderStatus {
-    READY
-    , COMPLETE
-    , CANCEL
+    READY, COMPLETE, CANCEL
 }

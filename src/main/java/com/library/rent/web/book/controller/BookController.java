@@ -21,21 +21,18 @@ public class BookController {
     private final BookService bookService;
 
     @Autowired
-    public BookController(BookService bookService)
-    {
+    public BookController(BookService bookService) {
         this.bookService = bookService;
     }
 
     @PostMapping("/kakao")
-    public ResponseEntity<Void> setBook(@RequestBody @Valid BookDto.SetBookDto param)
-    {
+    public ResponseEntity<Void> setBook(@RequestBody @Valid BookDto.SetBookDto param) {
         bookService.orderBook(param);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<Page<SaveBookResponse>> getSavedBook(@Valid BookSearchRequest bookSearchRequest)
-    {
+    public ResponseEntity<Page<SaveBookResponse>> getSavedBook(@Valid BookSearchRequest bookSearchRequest) {
         return bookService.getSavedBook(bookSearchRequest);
     }
 

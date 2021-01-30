@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 @Service
-@FeignClient(name="feign", url="${kakao.book.search.url}", configuration = {BookConfiguration.class})
+@FeignClient(name = "feign", url = "${kakao.book.search.url}", configuration = {BookConfiguration.class})
 public interface BookFeignClient {
 
     @RequestMapping(value = "/book", produces = "application/json", headers = "Authorization= KakaoAK ${kakao.appkey}")

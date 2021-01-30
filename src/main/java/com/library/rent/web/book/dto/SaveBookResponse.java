@@ -18,8 +18,7 @@ public class SaveBookResponse {
     private Long orderId;
 
     public SaveBookResponse(
-       String name, String isbn, String imgUrl, String publisher, String author, BookStatus bookStatus, Long orderId)
-    {
+            String name, String isbn, String imgUrl, String publisher, String author, BookStatus bookStatus, Long orderId) {
         this.name = name;
         this.isbn = isbn;
         this.imgUrl = imgUrl;

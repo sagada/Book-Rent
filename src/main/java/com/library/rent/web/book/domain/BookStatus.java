@@ -7,7 +7,7 @@ public enum BookStatus {
     ALL("ALL", "전체"),
     WAIT("WAIT", "입고대기"),
     COMP("COMP", "렌탈가능"),
-    CANCEL("CANCEL","입고 취소"),
+    CANCEL("CANCEL", "입고 취소"),
     RENT("RENT", "렌탈중");
 
     private String name;

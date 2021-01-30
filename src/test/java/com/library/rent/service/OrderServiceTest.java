@@ -49,13 +49,11 @@ public class OrderServiceTest {
     EntityManager entityManager;
 
     @BeforeEach
-    public void init()
-    {
+    public void init() {
         jpaQueryFactory = new JPAQueryFactory(entityManager);
 
-        for (int i = 0; i < 20; i++)
-        {
-            Book firstBook  = Book.createWaitBook("firstBook"  + i, 2, "firstIsbn"  + i);
+        for (int i = 0; i < 20; i++) {
+            Book firstBook = Book.createWaitBook("firstBook" + i, 2, "firstIsbn" + i);
             Book secondBook = Book.createWaitBook("secondBook" + i, 1, "secondIsbn" + i);
 
             OrderBook orderBook1 = OrderBook.createOrderBook(firstBook, 10);
@@ -69,10 +67,9 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void orderSearchTest()
-    {
+    public void orderSearchTest() {
         // given
-        OrderSearchRequest readyBookSearchCond =  new OrderSearchRequest();
+        OrderSearchRequest readyBookSearchCond = new OrderSearchRequest();
         readyBookSearchCond.setPage(0);
         readyBookSearchCond.setSize(10);
 

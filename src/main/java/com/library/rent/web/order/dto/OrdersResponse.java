@@ -25,8 +25,7 @@ public class OrdersResponse {
     private LocalDateTime orderDate;
     private List<OrderBookDto> orderBookDtoList = new ArrayList<>();
 
-    public OrdersResponse(Order order)
-    {
+    public OrdersResponse(Order order) {
         orderDate = order.getOrderDate();
         orderId = order.getId();
         orderStatus = order.getOrderStatus();
@@ -38,8 +37,7 @@ public class OrdersResponse {
 
     @Getter
     @Setter
-    public static class OrderBookDto
-    {
+    public static class OrderBookDto {
         private Long orderBookId;
         private String bookName;
         private int quantity;
@@ -49,8 +47,8 @@ public class OrdersResponse {
         private String publisher;
         private Long bookId;
         private String imgUrl;
-        public OrderBookDto(OrderBook orderBook, Book book)
-        {
+
+        public OrderBookDto(OrderBook orderBook, Book book) {
             this.imgUrl = book.getImgUrl();
             this.orderBookId = orderBook.getId();
             this.bookId = book.getId();

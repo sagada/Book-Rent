@@ -1,20 +1,20 @@
 buildscript {
-	ext{
-		springBootVersion = '2.1.7.RELEASE'
-		queryDslPluginVersion = '1.0.9'
-		springCloudVersion = 'Finchley.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-		maven { url "https://plugins.gradle.org/m2/" } // plugin 저장소
-	}
+    ext {
+        springBootVersion = '2.1.7.RELEASE'
+        queryDslPluginVersion = '1.0.9'
+        springCloudVersion = 'Finchley.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+        maven { url "https://plugins.gradle.org/m2/" } // plugin 저장소
+    }
 
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath "io.spring.gradle:dependency-management-plugin:1.0.7.RELEASE"
-		classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${queryDslPluginVersion}")
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.7.RELEASE"
+        classpath("gradle.plugin.com.ewerk.gradle.plugins:querydsl-plugin:${queryDslPluginVersion}")
 
-	}
+    }
 }
 apply plugin: 'java'
 apply plugin: 'eclipse'
@@ -30,49 +30,49 @@ def querydslSrcDir = 'src/main/generated'
 def querydslDir = "$buildDir/generated/querydsl"
 
 querydsl {
-	jpa = true
-	querydslSourcesDir = querydslDir
+    jpa = true
+    querydslSourcesDir = querydslDir
 }
 sourceSets {
-	main.java.srcDir querydslDir
+    main.java.srcDir querydslDir
 }
 configurations {
-	querydsl.extendsFrom compileClasspath
+    querydsl.extendsFrom compileClasspath
 }
 compileQuerydsl {
-	options.annotationProcessorPath = configurations.querydsl
+    options.annotationProcessorPath = configurations.querydsl
 }
 
 repositories {
-	mavenCentral()
-	maven { url "https://plugins.gradle.org/m2/" } // plugin 저장소
+    mavenCentral()
+    maven { url "https://plugins.gradle.org/m2/" } // plugin 저장소
 }
 
 dependencyManagement {
-	imports {
-		mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Greenwich.RELEASE'
-	}
+    imports {
+        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:Greenwich.RELEASE'
+    }
 }
 
 dependencies {
-	implementation 'junit:junit:4.12'
-	implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
-	implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
-	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7'
-	implementation 'com.querydsl:querydsl-jpa'
-	compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.0'
-	implementation("com.google.guava:guava:29.0-jre")
-	compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
+    implementation 'junit:junit:4.12'
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.7'
+    implementation 'com.querydsl:querydsl-jpa'
+    compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.0'
+    implementation("com.google.guava:guava:29.0-jre")
+    compile 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
-	compile('org.projectlombok:lombok')
-	annotationProcessor 'org.projectlombok:lombok'
-	runtimeOnly 'mysql:mysql-connector-java'
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compile('org.projectlombok:lombok')
+    annotationProcessor 'org.projectlombok:lombok'
+    runtimeOnly 'mysql:mysql-connector-java'
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 test {
-	useJUnitPlatform()
+    useJUnitPlatform()
 }

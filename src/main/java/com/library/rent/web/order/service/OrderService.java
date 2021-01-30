@@ -32,8 +32,8 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final BookRepository bookRepository;
     private final OrderBookRepository orderBookRepository;
-    public Page<OrdersResponse> getReadyBooks(OrderSearchRequest bookSearchCond)
-    {
+
+    public Page<OrdersResponse> getReadyBooks(OrderSearchRequest bookSearchCond) {
         Page<Order> orders = orderRepository.searchReadyBookWithPaging(bookSearchCond);
 
         List<OrdersResponse> ordersResponses = orders.stream()
@@ -44,13 +44,11 @@ public class OrderService {
     }
 
     @Transactional
-    public Long modifyOrderStatus(Long orderId, OrderStatus orderStatus)
-    {
+    public Long modifyOrderStatus(Long orderId, OrderStatus orderStatus) {
         Order order = orderRepository.findOrderById(orderId)
                 .orElseThrow(() -> new GlobalApiException(NOT_FOUND_RESOURCE, orderId + "의 해당하는 주문이 없습니다."));
 
-        if (!CollectionUtils.isEmpty(order.getOrderBookList()))
-        {
+        if (!CollectionUtils.isEmpty(order.getOrderBookList())) {
             updateBookStatus(orderStatus, getBookIds(order));
         }
 
@@ -59,14 +57,12 @@ public class OrderService {
         return orderId;
     }
 
-    private void updateBookStatus(OrderStatus orderStatus, List<Long> modifyBookIds)
-    {
-        BookStatus modifyBookStatus = orderStatus == OrderStatus.CANCEL? BookStatus.CANCEL : BookStatus.COMP;
+    private void updateBookStatus(OrderStatus orderStatus, List<Long> modifyBookIds) {
+        BookStatus modifyBookStatus = orderStatus == OrderStatus.CANCEL ? BookStatus.CANCEL : BookStatus.COMP;
         bookRepository.updateBookStatus(modifyBookStatus, modifyBookIds);
     }
 
-    private List<Long> getBookIds(Order order)
-    {
+    private List<Long> getBookIds(Order order) {
         return order.getOrderBookList()
                 .stream()
                 .map(orderBook -> orderBook.getBook().getId())
@@ -74,8 +70,7 @@ public class OrderService {
     }
 
     @Transactional
-    public void deleteOrderBook(Long orderBookId)
-    {
+    public void deleteOrderBook(Long orderBookId) {
         OrderBook orderBook = orderBookRepository.findOrderBookById(orderBookId)
                 .orElseThrow(() -> new GlobalApiException(LOGIC_ERROR, "없는 주문 책 ID 입니다."));
         orderBookRepository.delete(orderBook);

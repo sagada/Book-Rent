@@ -16,8 +16,7 @@ public class BookSearchCondition {
     private String author;
 
     @Builder
-    public BookSearchCondition(String name, String isbn, String publisher, String author)
-    {
+    public BookSearchCondition(String name, String isbn, String publisher, String author) {
         this.name = name;
         this.isbn = isbn;
         this.publisher = publisher;

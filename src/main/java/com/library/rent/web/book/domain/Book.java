@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Table( indexes = {
+@Table(indexes = {
         @Index(name = "isbn_idx", columnList = "isbn"),
         @Index(name = "name_idx", columnList = "book_name")
 })
@@ -22,7 +22,7 @@ public class Book extends BaseEntity {
     @Column(name = "book_id")
     private Long id;
 
-    @Column(name="book_name")
+    @Column(name = "book_name")
     private String name;
 
     @Column(unique = true)
@@ -32,7 +32,7 @@ public class Book extends BaseEntity {
     private String publisher;
     private String author;
 
-    @Column(columnDefinition = "TEXT", name= "img_url")
+    @Column(columnDefinition = "TEXT", name = "img_url")
     private String imgUrl;
 
     @Enumerated(EnumType.STRING)
@@ -40,24 +40,24 @@ public class Book extends BaseEntity {
 
     @OneToMany(mappedBy = "book")
     private List<OrderBook> orderBookList = new ArrayList<>();
-    public Book(String name)
-    {
+
+    public Book(String name) {
         this.name = name;
     }
 
     public void setBookStatus(BookStatus bookStatus) {
         this.bookStatus = bookStatus;
     }
-    public static Book createWaitBook(String name, int quantity, String isbn)
-    {
+
+    public static Book createWaitBook(String name, int quantity, String isbn) {
         return Book.builder().name(name).quantity(quantity).isbn(isbn).bookStatus(BookStatus.WAIT).build();
     }
+
     public void setName(String name) {
         this.name = name;
     }
 
-    public void setIsbn(String isbn)
-    {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
@@ -69,8 +69,7 @@ public class Book extends BaseEntity {
             , String publisher
             , String author
             , String imgUrl
-            , BookStatus bookStatus)
-    {
+            , BookStatus bookStatus) {
         this.name = name;
         this.isbn = isbn;
         this.quantity = quantity;

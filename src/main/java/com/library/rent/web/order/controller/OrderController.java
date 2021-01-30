@@ -21,8 +21,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping
-    public ResponseEntity<Page<OrdersResponse>> getOrders(@Valid OrderSearchRequest cond)
-    {
+    public ResponseEntity<Page<OrdersResponse>> getOrders(@Valid OrderSearchRequest cond) {
         Page<OrdersResponse> results = orderService.getReadyBooks(cond);
 
         return new ResponseEntity<>(results, HttpStatus.OK);
@@ -31,14 +30,12 @@ public class OrderController {
     @PutMapping("/modify/{orderId}/{orderStatus}")
     public ResponseEntity<Long> modifyOrderStatus(
             @PathVariable(value = "orderId") Long orderId,
-            @PathVariable(value = "orderStatus") OrderStatus orderStatus)
-    {
+            @PathVariable(value = "orderStatus") OrderStatus orderStatus) {
         return new ResponseEntity<>(orderService.modifyOrderStatus(orderId, orderStatus), HttpStatus.OK);
     }
 
     @DeleteMapping("/{orderBookId}")
-    public ResponseEntity<Void> deleteOrderBook(@PathVariable(value = "orderBookId") Long orderBookId)
-    {
+    public ResponseEntity<Void> deleteOrderBook(@PathVariable(value = "orderBookId") Long orderBookId) {
         orderService.deleteOrderBook(orderBookId);
 
         return new ResponseEntity<>(HttpStatus.OK);

@@ -46,8 +46,7 @@ public class BookSearchRequest {
                              Integer page,
                              Integer size,
                              LocalDateTime startAt,
-                             LocalDateTime endAt)
-    {
+                             LocalDateTime endAt) {
         this.search = search;
         this.bookSearchType = bookSearchType;
         this.bookStatus = bookStatus;

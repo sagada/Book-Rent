@@ -25,8 +25,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public BookRepositoryImpl(EntityManager entityManager)
-    {
+    public BookRepositoryImpl(EntityManager entityManager) {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
@@ -55,40 +54,33 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());
     }
 
-    private int getSearchSaveBookOffset(Pageable pageable)
-    {
-        if (pageable == null)
-        {
+    private int getSearchSaveBookOffset(Pageable pageable) {
+        if (pageable == null) {
             return 0;
         }
         return pageable.getPageNumber() * pageable.getPageSize();
     }
 
-    private BooleanExpression endLoe(LocalDateTime endAt)
-    {
+    private BooleanExpression endLoe(LocalDateTime endAt) {
         return endAt != null ? book.createdDate.loe(endAt) : null;
     }
 
 
-    private BooleanExpression startGoe(LocalDateTime startAt)
-    {
+    private BooleanExpression startGoe(LocalDateTime startAt) {
         return startAt != null ? book.createdDate.goe(startAt) : null;
     }
 
-    private BooleanExpression statusEq(BookStatus bookStatus)
-    {
+    private BooleanExpression statusEq(BookStatus bookStatus) {
         if (bookStatus == BookStatus.ALL)
             return null;
 
         return bookStatus != null ? book.bookStatus.eq(bookStatus) : null;
     }
 
-    private BooleanExpression searchEq(String search, BookSearchType searchType)
-    {
+    private BooleanExpression searchEq(String search, BookSearchType searchType) {
         if (search == null || searchType == null)
             return null;
-        switch (searchType.getNm())
-        {
+        switch (searchType.getNm()) {
             case "TITLE":
                 return book.name.contains(search);
             case "AUTHOR":
@@ -104,23 +96,19 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
         return null;
     }
 
-    private BooleanExpression bookAuthorEq(String author)
-    {
+    private BooleanExpression bookAuthorEq(String author) {
         return author != null ? book.author.eq(author) : null;
     }
 
-    private BooleanExpression bookPublisherEq(String publisher)
-    {
+    private BooleanExpression bookPublisherEq(String publisher) {
         return publisher != null ? book.publisher.eq(publisher) : null;
     }
 
-    private BooleanExpression bookIsbnEq(String isbn)
-    {
+    private BooleanExpression bookIsbnEq(String isbn) {
         return isbn != null ? book.isbn.eq(isbn) : null;
     }
 
-    private BooleanExpression bookNameEq(String name)
-    {
+    private BooleanExpression bookNameEq(String name) {
         return name != null ? book.name.contains(name) : null;
     }
 }

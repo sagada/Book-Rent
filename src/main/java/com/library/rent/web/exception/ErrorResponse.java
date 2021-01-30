@@ -12,14 +12,12 @@ public class ErrorResponse {
     private String message;
     private String content;
 
-    public ErrorResponse(String message, int statusCode)
-    {
+    public ErrorResponse(String message, int statusCode) {
         this.message = message;
         this.statusCode = statusCode;
     }
 
-    public ErrorResponse(String message, String content, int statusCode)
-    {
+    public ErrorResponse(String message, String content, int statusCode) {
         this.statusCode = statusCode;
         this.message = message;
         this.content = content;

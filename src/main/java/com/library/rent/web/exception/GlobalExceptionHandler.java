@@ -15,9 +15,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateBookException.class)
-    public ResponseEntity<ErrorResponse> handleDuplicateException(DuplicateBookException ex)
-    {
-        log.error("handleDuplicateException " , ex);
+    public ResponseEntity<ErrorResponse> handleDuplicateException(DuplicateBookException ex) {
+        log.error("handleDuplicateException ", ex);
 
         ErrorResponse errorBody = new ErrorResponse();
         errorBody.setStatusCode(HttpStatus.BAD_REQUEST.value());
@@ -27,15 +26,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex)
-    {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
         log.error("MethodArgumentNotValidException ", ex);
 
         BindingResult bindingResult = ex.getBindingResult();
 
         StringBuilder builder = new StringBuilder();
-        for (FieldError fieldError : bindingResult.getFieldErrors())
-        {
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
             builder.append("[");
             builder.append(fieldError.getField());
             builder.append("](은)는 ");
@@ -48,18 +45,16 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(GlobalApiException.class)
-    public ResponseEntity<ErrorResponse> handleGlobalApiException(GlobalApiException ex)
-    {
+    public ResponseEntity<ErrorResponse> handleGlobalApiException(GlobalApiException ex) {
         log.error("handleGlobalApiException ", ex);
         return new ResponseEntity<>(
-                    new ErrorResponse(ex.getMessage(), ex.getContent(), HttpStatus.INTERNAL_SERVER_ERROR.value())
-                    , HttpStatus.INTERNAL_SERVER_ERROR
-                );
+                new ErrorResponse(ex.getMessage(), ex.getContent(), HttpStatus.INTERNAL_SERVER_ERROR.value())
+                , HttpStatus.INTERNAL_SERVER_ERROR
+        );
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handException(Exception ex)
-    {
+    public ResponseEntity<ErrorResponse> handException(Exception ex) {
         log.error("Exception.class ERROR" + ex.getMessage() + ex.getLocalizedMessage());
         return new ResponseEntity<>(
                 new ErrorResponse(ex.getMessage(), ex.getLocalizedMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value())

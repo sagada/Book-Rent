@@ -10,8 +10,7 @@ public enum ErrorCode {
     LOGIC_ERROR("로직 오류가 발생 했습니다.");
     private final String message;
 
-    ErrorCode(String message)
-    {
+    ErrorCode(String message) {
         this.message = message;
     }
 

@@ -17,18 +17,16 @@ import java.time.LocalDateTime;
 import static com.library.rent.web.order.domain.QOrder.order;
 
 
-public class OrderRepositoryImpl implements OrderRepositoryCustom{
+public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public OrderRepositoryImpl(EntityManager entityManager)
-    {
+    public OrderRepositoryImpl(EntityManager entityManager) {
         this.queryFactory = new JPAQueryFactory(entityManager);
     }
 
     @Override
-    public Page<Order> searchReadyBookWithPaging(OrderSearchRequest cond)
-    {
+    public Page<Order> searchReadyBookWithPaging(OrderSearchRequest cond) {
         PageRequest pageable = PageRequest.of(cond.getPage(), cond.getSize());
 
         QueryResults<Order> results = queryFactory
@@ -47,23 +45,19 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom{
 
     }
 
-    private BooleanExpression orderIdEq(Long orderId)
-    {
+    private BooleanExpression orderIdEq(Long orderId) {
         return orderId != null ? order.id.eq(orderId) : null;
     }
 
-    private BooleanExpression orderStatusEq(OrderStatus orderStatus)
-    {
+    private BooleanExpression orderStatusEq(OrderStatus orderStatus) {
         return orderStatus != null ? order.orderStatus.eq(orderStatus) : null;
     }
 
-    private BooleanExpression orderGoe(LocalDateTime endDt)
-    {
+    private BooleanExpression orderGoe(LocalDateTime endDt) {
         return endDt != null ? order.orderDate.loe(endDt) : null;
     }
 
-    private BooleanExpression orderLoe(LocalDateTime startDt)
-    {
+    private BooleanExpression orderLoe(LocalDateTime startDt) {
         return startDt != null ? order.orderDate.goe(startDt) : null;
     }
 

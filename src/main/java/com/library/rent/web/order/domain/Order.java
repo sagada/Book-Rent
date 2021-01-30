@@ -37,14 +37,12 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
-    public void addOrderBook(OrderBook orderBook)
-    {
+    public void addOrderBook(OrderBook orderBook) {
         orderBookList.add(orderBook);
         orderBook.setOrder(this);
     }
 
-    public static Order createOrder(List<OrderBook> orderBooks)
-    {
+    public static Order createOrder(List<OrderBook> orderBooks) {
         Order order = new Order();
 
         order.setOrderDate(LocalDateTime.now());

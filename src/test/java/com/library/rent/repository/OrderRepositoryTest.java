@@ -43,10 +43,9 @@ public class OrderRepositoryTest {
     EntityManager entityManager;
 
     @BeforeEach
-    public void init()
-    {
+    public void init() {
         jpaQueryFactory = new JPAQueryFactory(entityManager);
-        for (int i = 0 ;i < 50; i++) {
+        for (int i = 0; i < 50; i++) {
             Book newbook = new Book();
             newbook.setBookStatus(BookStatus.WAIT);
             newbook.setIsbn("126163L" + i);
@@ -54,7 +53,7 @@ public class OrderRepositoryTest {
 
             Book newbook2 = new Book();
             newbook2.setBookStatus(BookStatus.WAIT);
-            newbook2.setIsbn("1223223L"+ i);
+            newbook2.setIsbn("1223223L" + i);
             bookRepository.save(newbook2);
 
             OrderBook orderBook1 = OrderBook.createOrderBook(newbook, 10);
@@ -69,9 +68,8 @@ public class OrderRepositoryTest {
     }
 
     @Test
-    public void getOrderListTest()
-    {
-        OrderSearchRequest readyBookSearchCond =  new OrderSearchRequest();
+    public void getOrderListTest() {
+        OrderSearchRequest readyBookSearchCond = new OrderSearchRequest();
         readyBookSearchCond.setPage(0);
         readyBookSearchCond.setSize(15);
 

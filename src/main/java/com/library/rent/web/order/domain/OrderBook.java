@@ -7,7 +7,7 @@ import lombok.*;
 import javax.persistence.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of={"count", "id"})
+@ToString(of = {"count", "id"})
 @Getter
 @Table(name = "orders_book")
 @Entity
@@ -32,14 +32,12 @@ public class OrderBook extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Book book;
 
-    public OrderBook(int count, Book book)
-    {
+    public OrderBook(int count, Book book) {
         this.count = count;
         this.book = book;
     }
 
-    public static OrderBook createOrderBook(Book book, int count)
-    {
+    public static OrderBook createOrderBook(Book book, int count) {
         return new OrderBook(count, book);
     }
 

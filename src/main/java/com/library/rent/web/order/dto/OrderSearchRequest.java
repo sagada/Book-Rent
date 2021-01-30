@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class OrderSearchRequest {
-    
+
     @Min(value = 0, message = "아이디는 1이상입니다.")
     private Long orderId;
 
@@ -27,6 +27,7 @@ public class OrderSearchRequest {
     @NotNull(message = "page 사이즈를 입력해주세요.")
     @Min(0)
     private Integer size = 10;
+
     public void validate() {
     }
 }

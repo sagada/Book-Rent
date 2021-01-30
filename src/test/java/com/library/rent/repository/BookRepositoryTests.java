@@ -48,9 +48,9 @@ public class BookRepositoryTests {
     OrderBookRepository orderBookRepository;
 
     JPAQueryFactory queryFactory;
+
     @BeforeEach
-    public void init()
-    {
+    public void init() {
         queryFactory = new JPAQueryFactory(entityManager);
 //        for (int i = 1; i <= 30; i++)
 //        {
@@ -69,8 +69,7 @@ public class BookRepositoryTests {
     }
 
     @Test
-    public void createABookTest()
-    {
+    public void createABookTest() {
         String bookName = "JPA";
         Book book = new Book(bookName);
         Book savedBook = bookRepository.save(book);
@@ -81,8 +80,7 @@ public class BookRepositoryTests {
     }
 
     @Test
-    public void isbnExistTest()
-    {
+    public void isbnExistTest() {
         String bookName = "JPA";
         Book book1 = new Book(bookName);
         book1.setIsbn("isbnA");
@@ -105,8 +103,7 @@ public class BookRepositoryTests {
     }
 
     @Test
-    public void saveBookSearchWithTitleSearchAndType()
-    {
+    public void saveBookSearchWithTitleSearchAndType() {
         // given
         String search = "name";
         BookSearchType searchType = BookSearchType.TITLE;
@@ -125,8 +122,7 @@ public class BookRepositoryTests {
     }
 
     @Test
-    public void saveBookSearchWithIsbnSearch()
-    {
+    public void saveBookSearchWithIsbnSearch() {
         String isbn = "isbn13";
         BookSearchType searchType = BookSearchType.ISBN;
         BookSearchRequest bookSearchRequest = BookSearchRequest.builder()
@@ -144,8 +140,7 @@ public class BookRepositoryTests {
     }
 
     @Test
-    public void saveBookSearchAllNullParamTest()
-    {
+    public void saveBookSearchAllNullParamTest() {
         BookSearchRequest bookSearchRequest = BookSearchRequest.builder()
                 .page(0)
                 .size(10)
@@ -158,8 +153,7 @@ public class BookRepositoryTests {
     }
 
     @Test
-    public void saveBookSearchByAuthor()
-    {
+    public void saveBookSearchByAuthor() {
         // given
         String author = "베놈";
         Book book = Book.builder()
@@ -190,16 +184,15 @@ public class BookRepositoryTests {
         return order;
     }
 
-    private List<Book> givenMockWaitBooks()
-    {
+    private List<Book> givenMockWaitBooks() {
         return Lists.newArrayList(
                 Book.builder()
-                    .author("아이유")
-                    .name("JPA")
-                    .publisher("동아출판사")
-                    .isbn("123")
-                    .bookStatus(BookStatus.WAIT)
-                    .build(),
+                        .author("아이유")
+                        .name("JPA")
+                        .publisher("동아출판사")
+                        .isbn("123")
+                        .bookStatus(BookStatus.WAIT)
+                        .build(),
 
                 Book.builder()
                         .author("이동민")
@@ -216,12 +209,11 @@ public class BookRepositoryTests {
                         .isbn("1235")
                         .bookStatus(BookStatus.WAIT)
                         .build()
-                );
+        );
     }
 
     @Test
-    public void testtt()
-    {
+    public void testtt() {
         Order order2 = getOrder();
         Order order3 = getOrder2();
         orderRepository.save(order2);
