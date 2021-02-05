@@ -4,3 +4,4 @@
 3. Querydsl
 4. Mysql
 5. React (front)
+6. JWT
