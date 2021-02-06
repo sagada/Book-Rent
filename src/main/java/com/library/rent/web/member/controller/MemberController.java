@@ -26,7 +26,8 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<Member> signup(
             @Valid @RequestBody MemberDto memberDto
-    ) {
+    )
+    {
         return ResponseEntity.ok(userService.signup(memberDto));
     }
 
