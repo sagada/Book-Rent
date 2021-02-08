@@ -4,11 +4,12 @@ import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookSearchType;
 import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.book.dto.BookSearchRequest;
-import com.library.rent.web.order.dto.OrdersResponse;
 import com.library.rent.web.book.dto.SaveBookResponse;
 import com.library.rent.web.book.repository.BookRepository;
 import com.library.rent.web.order.domain.Order;
 import com.library.rent.web.order.domain.OrderBook;
+import com.library.rent.web.order.domain.QOrder;
+import com.library.rent.web.order.dto.OrdersResponse;
 import com.library.rent.web.order.repository.OrderBookRepository;
 import com.library.rent.web.order.repository.OrderRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,19 +17,19 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.library.rent.web.order.QOrder.*;
-import static com.library.rent.web.order.QOrderBook.orderBook;
+import static com.library.rent.web.order.domain.QOrder.*;
+import static com.library.rent.web.order.domain.QOrderBook.orderBook;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
