@@ -1,7 +1,6 @@
 package com.library.rent.web.member.controller;
 
 import com.library.rent.web.member.domain.Member;
-import com.library.rent.web.member.dto.MemberDto;
 import com.library.rent.web.member.service.MemberService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,11 +15,6 @@ public class MemberController {
 
     public MemberController(MemberService userService) {
         this.userService = userService;
-    }
-
-    @GetMapping("/hello")
-    public ResponseEntity<String> hello() {
-        return ResponseEntity.ok("hello");
     }
 
     @PostMapping("/signup")
