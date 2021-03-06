@@ -1,6 +1,7 @@
 package com.library.rent.web.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.library.rent.web.BaseEntity;
 import com.library.rent.web.auth.Authority;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "member")
 @Entity
-public class Member {
+public class Member extends BaseEntity {
 
     @Id
     @Column(name = "member_id")

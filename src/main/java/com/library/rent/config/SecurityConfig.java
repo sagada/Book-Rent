@@ -4,6 +4,7 @@ import com.library.rent.jwt.JwtAccessDeniedHandler;
 import com.library.rent.jwt.JwtAuthenticationEntryPoint;
 import com.library.rent.jwt.JwtSecurityConfig;
 import com.library.rent.jwt.TokenProvider;
+import io.swagger.models.HttpMethod;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -38,23 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    public void configure(WebSecurity web) {
-        web.ignoring()
-                .antMatchers(
-                        "/h2-console/**"
-                        ,"/favicon.ico"
-                        ,"/error"
-                        , "/**"
-                );
-    }
-
-    @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
                 .csrf().disable()
-
-//                .addFilterBefore(corsFilter, UsernamePasswordAuthenticationFilter.class)
 
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -73,11 +61,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/hello").permitAll()
-                .antMatchers("/api/authenticate").permitAll()
-                .antMatchers("/api/signup").permitAll()
+                .antMatchers("/api/auth/authenticate").permitAll()
+                .antMatchers("/api/auth/signup").permitAll()
+                .antMatchers("/api/auth/log").hasRole("USER")
+                .antMatchers(
+                        "/h2-console/**"
+                        ,"/favicon.ico"
+                        ,"/error"
+                        , "/**").permitAll()
 
-                .anyRequest().authenticated()
+
+
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));

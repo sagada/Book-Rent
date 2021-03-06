@@ -43,4 +43,11 @@ public class AuthController {
 
         return new ResponseEntity<>(new TokenDto(jwt, loginDto.getUsername()), httpHeaders, HttpStatus.OK);
     }
+
+    @PostMapping("/log")
+    public boolean isLogin()
+    {
+        return true;
+    }
+
 }

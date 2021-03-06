@@ -4,6 +4,7 @@ import com.library.rent.util.SecurityUtil;
 import com.library.rent.web.auth.Authority;
 import com.library.rent.web.member.domain.Member;
 import com.library.rent.web.member.dto.MemberDto;
+import com.library.rent.web.member.dto.MemberSignUpResponseDto;
 import com.library.rent.web.member.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ public class MemberService {
     }
 
     @Transactional
-    public Member signup(MemberDto memberDto) {
+    public MemberSignUpResponseDto signup(MemberDto memberDto) {
         if (memberRepository.findOneWithAuthoritiesByEmail(memberDto.getEmail()).orElse(null) != null) {
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
@@ -41,7 +42,9 @@ public class MemberService {
                 .active(true)
                 .build();
 
-        return memberRepository.save(user);
+        Member saveMember = memberRepository.save(user);
+
+        return MemberSignUpResponseDto.Ok(saveMember);
     }
 
     @Transactional(readOnly = true)
