@@ -31,16 +31,15 @@ public class GlobalExceptionHandler {
 
         BindingResult bindingResult = ex.getBindingResult();
 
-        StringBuilder builder = new StringBuilder();
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            builder.append("[");
-            builder.append(fieldError.getField());
-            builder.append("](은)는 ");
-            builder.append(fieldError.getDefaultMessage());
-        }
-
+//        StringBuilder builder = new StringBuilder();
+//        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+//            builder.append("[");
+//            builder.append(fieldError.getField());
+//            builder.append("](은)는 ");
+//            builder.append(fieldError.getDefaultMessage());
+//        }
         return new ResponseEntity<>(
-                new ErrorResponse(ex.getMessage(), builder.toString(), HttpStatus.BAD_REQUEST.value())
+                new ErrorResponse(ex.getMessage(), ex.getBindingResult().getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST.value())
                 , HttpStatus.BAD_REQUEST);
     }
 
