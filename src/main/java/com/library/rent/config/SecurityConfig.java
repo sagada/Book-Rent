@@ -63,16 +63,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/api/auth/authenticate").permitAll()
                 .antMatchers("/api/auth/signup").permitAll()
-                .antMatchers("/api/auth/log").hasRole("USER")
                 .antMatchers(
                         "/h2-console/**"
                         ,"/favicon.ico"
                         ,"/error"
                         , "/**").permitAll()
-
-
-
-
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
     }

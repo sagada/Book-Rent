@@ -4,6 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
+    NON_ROLES("권한이 존재하지 않습니다."),
+    NON_USER("존재하지 않는 사용자 입니다."),
     DUPLICATE_BOOK("중복된 값 또는 데이터가 있습니다."),
     PARAMETER_ERROR("파라미터가 적절하지 않습니다."),
     NOT_FOUND_RESOURCE("찾을 수 없는 값이 있습니다."),
