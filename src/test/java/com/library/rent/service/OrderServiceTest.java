@@ -1,5 +1,6 @@
 package com.library.rent.service;
 
+import com.library.rent.web.auth.Authority;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.book.repository.BookRepository;
@@ -18,12 +19,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +46,9 @@ public class OrderServiceTest {
 
     @Autowired
     OrderBookRepository orderBookRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     JPAQueryFactory jpaQueryFactory;
 
@@ -96,5 +102,26 @@ public class OrderServiceTest {
 
         assertThat(saveOrder.getMember().getEmail()).isEqualTo(memberEmail);
         assertThat(order.getOrderBookList().size()).isEqualTo(2);
+    }
+
+
+    @Test
+    @Transactional
+    @Commit
+    public void adminTest()
+    {
+        Authority authority = Authority.builder()
+                .authorityName("ROLE_ADMIN")
+                .build();
+
+        Member user = Member.builder()
+                .email("admin@naver.com")
+                .password(passwordEncoder.encode("admin"))
+                .nickname("admin")
+                .authorities(Collections.singleton(authority))
+                .active(true)
+                .build();
+
+        memberRepository.save(user);
     }
 }

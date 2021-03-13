@@ -38,7 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 // token을 사용하는 방식이기 때문에 csrf를 disable합니다.
-                .csrf().disable()
+                .csrf()
+                .disable()
                 .cors().and()
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
@@ -53,12 +54,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 세션을 사용하지 않기 때문에 STATELESS로 설정
                 .and()
                 .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-                .and()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/api/auth/authenticate").permitAll()
-                .antMatchers("/api/book/kakao").hasAuthority("ADMIN")
+                .antMatchers("/api/book/kakao").hasRole("USER")
                 .antMatchers("/api/auth/signup").permitAll()
                 .antMatchers(
                         "/h2-console/**"

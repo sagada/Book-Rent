@@ -21,11 +21,14 @@ public class OrdersResponse {
 
     private Long orderId;
     private OrderStatus orderStatus;
+    private String memberNm;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime orderDate;
     private List<OrderBookDto> orderBookDtoList = new ArrayList<>();
 
     public OrdersResponse(Order order) {
+
+        memberNm = order.getMember().getEmail();
         orderDate = order.getOrderDate();
         orderId = order.getId();
         orderStatus = order.getOrderStatus();
