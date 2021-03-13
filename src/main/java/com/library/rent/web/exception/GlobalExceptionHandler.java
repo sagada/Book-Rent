@@ -10,12 +10,16 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.security.auth.message.AuthException;
+import java.nio.file.AccessDeniedException;
+
 @Log4j2
 @RestControllerAdvice(annotations = RestController.class)
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(DuplicateBookException.class)
-    public ResponseEntity<ErrorResponse> handleDuplicateException(DuplicateBookException ex) {
+    public ResponseEntity<ErrorResponse> handleDuplicateException(DuplicateBookException ex)
+    {
         log.error("handleDuplicateException ", ex);
 
         ErrorResponse errorBody = new ErrorResponse();
@@ -26,29 +30,35 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorResponse> handleMethodArgumentNotValid(MethodArgumentNotValidException ex)
+    {
         log.error("MethodArgumentNotValidException ", ex);
 
-        BindingResult bindingResult = ex.getBindingResult();
-
-//        StringBuilder builder = new StringBuilder();
-//        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-//            builder.append("[");
-//            builder.append(fieldError.getField());
-//            builder.append("](은)는 ");
-//            builder.append(fieldError.getDefaultMessage());
-//        }
         return new ResponseEntity<>(
-                new ErrorResponse(ex.getMessage(), ex.getBindingResult().getFieldError().getDefaultMessage(), HttpStatus.BAD_REQUEST.value())
+                new ErrorResponse(
+                        ex.getMessage()
+                        , ex.getBindingResult().getFieldError().getDefaultMessage()
+                        , HttpStatus.BAD_REQUEST.value())
                 , HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(GlobalApiException.class)
-    public ResponseEntity<ErrorResponse> handleGlobalApiException(GlobalApiException ex) {
+    public ResponseEntity<ErrorResponse> handleGlobalApiException(GlobalApiException ex)
+    {
         log.error("handleGlobalApiException ", ex);
         return new ResponseEntity<>(
-                new ErrorResponse(ex.getMessage(), ex.getContent(), HttpStatus.INTERNAL_SERVER_ERROR.value())
-                , HttpStatus.INTERNAL_SERVER_ERROR
+                new ErrorResponse(ex.getMessage(), ex.getContent(), ex.getCode().value())
+                , ex.getCode()
+        );
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleGlobalApiException(AccessDeniedException ex)
+    {
+        log.error("AccessDeniedException ", ex);
+        return new ResponseEntity<>(
+                new ErrorResponse(ex.getMessage(), ex.getLocalizedMessage(), HttpStatus.UNAUTHORIZED.value())
+                , HttpStatus.UNAUTHORIZED
         );
     }
 

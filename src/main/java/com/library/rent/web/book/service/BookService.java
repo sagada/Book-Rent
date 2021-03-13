@@ -5,6 +5,7 @@ import com.library.rent.web.book.dto.*;
 import com.library.rent.web.book.repository.BookRepository;
 import com.library.rent.web.exception.ErrorCode;
 import com.library.rent.web.exception.GlobalApiException;
+import com.library.rent.web.member.domain.Member;
 import com.library.rent.web.order.domain.Order;
 import com.library.rent.web.order.domain.OrderBook;
 import com.library.rent.web.order.repository.OrderRepository;
@@ -35,23 +36,26 @@ public class BookService {
     }
 
     @Transactional
-    public void orderBook(BookDto.SetBookDto param) {
+    public void orderBook(BookDto.SetBookDto param, Member member)
+    {
         checkDuplicateIsbns(param);
         List<Book> books = createBook(param);
 
         List<OrderBook> orderBooks = createOrderBookList(books);
 
-        Order order = Order.createOrder(orderBooks);
+        Order order = Order.createOrder(orderBooks, member);
         orderRepository.save(order);
     }
 
-    private List<OrderBook> createOrderBookList(List<Book> books) {
+    private List<OrderBook> createOrderBookList(List<Book> books)
+    {
         return books.stream()
                 .map(book -> OrderBook.createOrderBook(book, book.getQuantity()))
                 .collect(Collectors.toList());
     }
 
-    private void checkDuplicateIsbns(BookDto.SetBookDto param) {
+    private void checkDuplicateIsbns(BookDto.SetBookDto param)
+    {
         List<String> isbnList = getIsbnList(param);
         List<Book> findBookByIsbnList = bookRepository.findBooksByIsbnIn(isbnList);
 
@@ -61,7 +65,7 @@ public class BookService {
                     .map(Book::getName)
                     .collect(Collectors.joining(",\n"));
 
-            throw new GlobalApiException(ErrorCode.DUPLICATE_BOOK, errorBookList);
+            throw new GlobalApiException(ErrorCode.DUPLICATE_BOOK, errorBookList, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

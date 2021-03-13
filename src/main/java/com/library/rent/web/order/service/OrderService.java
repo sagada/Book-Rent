@@ -15,6 +15,7 @@ import lombok.extern.log4j.Log4j2;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,7 +47,7 @@ public class OrderService {
     @Transactional
     public Long modifyOrderStatus(Long orderId, OrderStatus orderStatus) {
         Order order = orderRepository.findOrderById(orderId)
-                .orElseThrow(() -> new GlobalApiException(NOT_FOUND_RESOURCE, orderId + "의 해당하는 주문이 없습니다."));
+                .orElseThrow(() -> new GlobalApiException(NOT_FOUND_RESOURCE, orderId + "의 해당하는 주문이 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR));
 
         if (!CollectionUtils.isEmpty(order.getOrderBookList())) {
             updateBookStatus(orderStatus, getBookIds(order));
@@ -72,7 +73,7 @@ public class OrderService {
     @Transactional
     public void deleteOrderBook(Long orderBookId) {
         OrderBook orderBook = orderBookRepository.findOrderBookById(orderBookId)
-                .orElseThrow(() -> new GlobalApiException(LOGIC_ERROR, "없는 주문 책 ID 입니다."));
+                .orElseThrow(() -> new GlobalApiException(LOGIC_ERROR, "없는 주문 책 ID 입니다.", HttpStatus.INTERNAL_SERVER_ERROR));
         orderBookRepository.delete(orderBook);
     }
 }

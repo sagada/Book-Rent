@@ -20,7 +20,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
@@ -61,7 +60,7 @@ public class AuthController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Member member = memberRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(
-                        ()->  new GlobalApiException(ErrorCode.NON_USER, "존재하지 않는 사용자")
+                        ()->  new GlobalApiException(ErrorCode.NON_USER, "존재하지 않는 사용자", HttpStatus.INTERNAL_SERVER_ERROR)
                 );
         return new UserInfoResponseDto(userDetails.getUsername(), member.getNickname());
     }

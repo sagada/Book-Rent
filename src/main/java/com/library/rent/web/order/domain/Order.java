@@ -1,6 +1,7 @@
 package com.library.rent.web.order.domain;
 
 
+import com.library.rent.web.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,8 +30,16 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     List<OrderBook> orderBookList = new ArrayList<>();
 
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
     public void setOrderDate(LocalDateTime orderDate) {
         this.orderDate = orderDate;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {
@@ -42,12 +51,13 @@ public class Order {
         orderBook.setOrder(this);
     }
 
-    public static Order createOrder(List<OrderBook> orderBooks) {
+    public static Order createOrder(List<OrderBook> orderBooks, Member member) {
         Order order = new Order();
-
         order.setOrderDate(LocalDateTime.now());
         order.setOrderStatus(OrderStatus.READY);
+        order.setMember(member);
         orderBooks.forEach(order::addOrderBook);
+
         return order;
     }
 

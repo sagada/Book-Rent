@@ -6,6 +6,7 @@ import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.book.dto.BookSearchRequest;
 import com.library.rent.web.book.dto.SaveBookResponse;
 import com.library.rent.web.book.repository.BookRepository;
+import com.library.rent.web.member.domain.Member;
 import com.library.rent.web.order.domain.Order;
 import com.library.rent.web.order.domain.OrderBook;
 import com.library.rent.web.order.domain.QOrder;
@@ -179,9 +180,10 @@ public class BookRepositoryTests {
     }
 
     private Order givenOrder() {
+        Member m = new Member("awewe@naver.com", "123123", "nick11", true);
         List<Book> books = givenMockWaitBooks();
         List<OrderBook> orderBookList = books.stream().map(s -> OrderBook.createOrderBook(s, 1)).collect(Collectors.toList());
-        Order order = Order.createOrder(orderBookList);
+        Order order = Order.createOrder(orderBookList,m);
         return order;
     }
 
@@ -254,7 +256,8 @@ public class BookRepositoryTests {
 
         orderBookRepository.save(orderBook1);
         orderBookRepository.save(orderBook2);
-        Order order2 = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2));
+        Member m = new Member("awewe@naver.com", "123123", "nick11", true);
+        Order order2 = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2), m);
         return order2;
     }
 
@@ -271,10 +274,10 @@ public class BookRepositoryTests {
 
         OrderBook orderBook1 = OrderBook.createOrderBook(newbook, 10);
         OrderBook orderBook2 = OrderBook.createOrderBook(newbook2, 12);
-
+        Member m = new Member("awewe@naver.com", "123123", "nick11", true);
         orderBookRepository.save(orderBook1);
         orderBookRepository.save(orderBook2);
-        Order order2 = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2));
+        Order order2 = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2), m);
         return order2;
     }
 

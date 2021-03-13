@@ -3,6 +3,8 @@ package com.library.rent.service;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.book.repository.BookRepository;
+import com.library.rent.web.member.domain.Member;
+import com.library.rent.web.member.repository.MemberRepository;
 import com.library.rent.web.order.domain.Order;
 import com.library.rent.web.order.domain.OrderBook;
 import com.library.rent.web.order.dto.OrderSearchRequest;
@@ -12,11 +14,11 @@ import com.library.rent.web.order.repository.OrderRepository;
 import com.library.rent.web.order.service.OrderService;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.assertj.core.util.Lists;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -28,11 +30,13 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@Transactional
 public class OrderServiceTest {
 
     @Autowired
     OrderService orderService;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Autowired
     BookRepository bookRepository;
@@ -48,23 +52,6 @@ public class OrderServiceTest {
     @PersistenceContext
     EntityManager entityManager;
 
-    @BeforeEach
-    public void init() {
-        jpaQueryFactory = new JPAQueryFactory(entityManager);
-
-        for (int i = 0; i < 20; i++) {
-            Book firstBook = Book.createWaitBook("firstBook" + i, 2, "firstIsbn" + i);
-            Book secondBook = Book.createWaitBook("secondBook" + i, 1, "secondIsbn" + i);
-
-            OrderBook orderBook1 = OrderBook.createOrderBook(firstBook, 10);
-            OrderBook orderBook2 = OrderBook.createOrderBook(secondBook, 12);
-            Order newOrder = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2));
-            orderRepository.save(newOrder);
-        }
-
-        entityManager.flush();
-        entityManager.clear();
-    }
 
     @Test
     public void orderSearchTest() {
@@ -87,5 +74,27 @@ public class OrderServiceTest {
         assertThat(allOrderBookDtoList.size()).isEqualTo(20);
         assertThat(allOrderBookDtoList).extracting("bookStatus").containsOnly(BookStatus.WAIT);
         assertThat(result.getNumber()).isEqualTo(0);
+    }
+
+    @Test
+    @Transactional
+    @Commit
+    public void memberOrderTest()
+    {
+        // given
+        String memberEmail = "am@naver.com";
+        Member member = new Member(memberEmail, "wqeq", "nick", true);
+        memberRepository.save(member);
+        Book b1 = Book.createWaitBook("book1", 1, "1ISBN");
+        Book b2 = Book.createWaitBook("book2", 1, "2ISBN");
+
+        OrderBook orderBook1 = OrderBook.createOrderBook(b1, 1);
+        OrderBook orderBook2 = OrderBook.createOrderBook(b2, 1);
+
+        Order order = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2), member);
+        Order saveOrder = orderRepository.save(order);
+
+        assertThat(saveOrder.getMember().getEmail()).isEqualTo(memberEmail);
+        assertThat(order.getOrderBookList().size()).isEqualTo(2);
     }
 }

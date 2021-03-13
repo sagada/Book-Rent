@@ -3,16 +3,19 @@ package com.library.rent.web.member.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.library.rent.web.BaseEntity;
 import com.library.rent.web.auth.Authority;
+import com.library.rent.web.order.domain.Order;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "member")
 @Entity
 public class Member extends BaseEntity {
@@ -35,6 +38,16 @@ public class Member extends BaseEntity {
     @JsonIgnore
     @Column(name = "active")
     private boolean active;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Order> orderList = new ArrayList<>();
+
+    public Member(String email, String password, String nickname, boolean active) {
+        this.email = email;
+        this.password = password;
+        this.nickname = nickname;
+        this.active = active;
+    }
 
     @ManyToMany
     @JoinTable(

@@ -1,5 +1,6 @@
 package com.library.rent.web.member.controller;
 
+import com.library.rent.web.auth.AuthUtil;
 import com.library.rent.web.member.domain.Member;
 import com.library.rent.web.member.dto.MemberDto;
 import com.library.rent.web.member.dto.MemberSignUpResponseDto;
@@ -38,5 +39,10 @@ public class MemberController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<Member> getUserInfo(@PathVariable String username) {
         return ResponseEntity.ok(userService.getUserWithAuthorities(username).get());
+    }
+
+    @GetMapping("/user/check")
+    public String test(){
+        return AuthUtil.getCurUserEmail();
     }
 }

@@ -1,11 +1,15 @@
 package com.library.rent.web.member.service;
 
 import com.library.rent.util.SecurityUtil;
+import com.library.rent.web.auth.AuthUtil;
 import com.library.rent.web.auth.Authority;
+import com.library.rent.web.exception.ErrorCode;
+import com.library.rent.web.exception.GlobalApiException;
 import com.library.rent.web.member.domain.Member;
 import com.library.rent.web.member.dto.MemberDto;
 import com.library.rent.web.member.dto.MemberSignUpResponseDto;
 import com.library.rent.web.member.repository.MemberRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,5 +59,11 @@ public class MemberService {
     @Transactional(readOnly = true)
     public Optional<Member> getMyUserWithAuthorities() {
         return SecurityUtil.getCurrentUsername().flatMap(memberRepository::findOneWithAuthoritiesByEmail);
+    }
+
+    public Member findByEmail()
+    {
+        return memberRepository.findByEmail(AuthUtil.getCurUserEmail()).orElseThrow(()->
+                new GlobalApiException(ErrorCode.NON_USER, "사용자 에러", HttpStatus.INTERNAL_SERVER_ERROR));
     }
 }

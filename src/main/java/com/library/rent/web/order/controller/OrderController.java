@@ -37,7 +37,6 @@ public class OrderController {
     @DeleteMapping("/{orderBookId}")
     public ResponseEntity<Void> deleteOrderBook(@PathVariable(value = "orderBookId") Long orderBookId) {
         orderService.deleteOrderBook(orderBookId);
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

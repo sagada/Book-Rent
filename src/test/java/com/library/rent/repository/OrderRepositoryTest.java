@@ -2,6 +2,7 @@ package com.library.rent.repository;
 
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
+import com.library.rent.web.member.domain.Member;
 import com.library.rent.web.order.dto.OrderSearchRequest;
 import com.library.rent.web.book.repository.BookRepository;
 import com.library.rent.web.order.domain.Order;
@@ -45,6 +46,10 @@ public class OrderRepositoryTest {
     @BeforeEach
     public void init() {
         jpaQueryFactory = new JPAQueryFactory(entityManager);
+
+        Member m = new Member("takeaw@naver.com", "tt", "nick", true);
+
+
         for (int i = 0; i < 50; i++) {
             Book newbook = new Book();
             newbook.setBookStatus(BookStatus.WAIT);
@@ -61,7 +66,7 @@ public class OrderRepositoryTest {
 
             orderBookRepository.save(orderBook1);
             orderBookRepository.save(orderBook2);
-            Order order2 = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2));
+            Order order2 = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2), m);
 
             orderRepository.save(order2);
         }
