@@ -36,6 +36,7 @@ public class OrderController {
         return new ResponseEntity<>(orderService.modifyOrderStatus(orderId, orderStatus), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{orderBookId}")
     public ResponseEntity<Void> deleteOrderBook(@PathVariable(value = "orderBookId") Long orderBookId) {
         orderService.deleteOrderBook(orderBookId);

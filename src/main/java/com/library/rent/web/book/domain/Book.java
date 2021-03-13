@@ -25,7 +25,7 @@ public class Book extends BaseEntity {
     @Column(name = "book_name")
     private String name;
 
-    @Column(unique = true)
+    @Column(name = "isbn")
     private String isbn;
 
     private int quantity;

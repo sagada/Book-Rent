@@ -62,7 +62,7 @@ public class AuthController {
                 .orElseThrow(
                         ()->  new GlobalApiException(ErrorCode.NON_USER, "존재하지 않는 사용자", HttpStatus.INTERNAL_SERVER_ERROR)
                 );
-        return new UserInfoResponseDto(userDetails.getUsername(), member.getNickname());
+        return new UserInfoResponseDto(userDetails.getUsername(), member.getNickname(), member.getAuthorities());
     }
 
 }

@@ -57,7 +57,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/api/auth/authenticate").permitAll()
-                .antMatchers("/api/book/kakao").hasRole("ADMIN")
+                .antMatchers("/api/book/kakao").hasRole("USER")
                 .antMatchers("/api/auth/signup").permitAll()
                 .antMatchers(
                         "/h2-console/**"

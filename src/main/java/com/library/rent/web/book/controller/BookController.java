@@ -30,6 +30,7 @@ public class BookController {
         this.bookService = bookService;
         this.memberService = memberService;
     }
+
     @PostMapping("/kakao")
     public ResponseEntity<Void> setBook(@RequestBody @Valid BookDto.SetBookDto param)
     {
@@ -43,6 +44,4 @@ public class BookController {
     {
         return bookService.getSavedBook(bookSearchRequest);
     }
-
-
 }

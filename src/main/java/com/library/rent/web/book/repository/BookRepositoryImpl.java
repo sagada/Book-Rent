@@ -88,7 +88,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
             case "PUBLISHER":
                 return book.publisher.contains(search);
             case "ISBN":
-                return book.isbn.eq(search);
+                return book.isbn.contains(search);
             default:
                 break;
         }

@@ -38,7 +38,7 @@ public class BookService {
     @Transactional
     public void orderBook(BookDto.SetBookDto param, Member member)
     {
-        checkDuplicateIsbns(param);
+//        checkDuplicateIsbns(param);
         List<Book> books = createBook(param);
 
         List<OrderBook> orderBooks = createOrderBookList(books);
