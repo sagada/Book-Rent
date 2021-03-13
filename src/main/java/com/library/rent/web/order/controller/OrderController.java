@@ -28,7 +28,7 @@ public class OrderController {
         return new ResponseEntity<>(results, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/modify/{orderId}/{orderStatus}")
     public ResponseEntity<Long> modifyOrderStatus(
             @PathVariable(value = "orderId") Long orderId,

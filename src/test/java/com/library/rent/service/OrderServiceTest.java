@@ -84,12 +84,11 @@ public class OrderServiceTest {
 
     @Test
     @Transactional
-    @Commit
     public void memberOrderTest()
     {
         // given
-        String memberEmail = "am@naver.com";
-        Member member = new Member(memberEmail, "wqeq", "nick", true);
+        String memberEmail = "admin@naver.com";
+        Member member = new Member(memberEmail, "admin", "nick", true);
         memberRepository.save(member);
         Book b1 = Book.createWaitBook("book1", 1, "1ISBN");
         Book b2 = Book.createWaitBook("book2", 1, "2ISBN");
@@ -106,7 +105,6 @@ public class OrderServiceTest {
 
 
     @Test
-    @Transactional
     @Commit
     public void adminTest()
     {

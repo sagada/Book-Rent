@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public class OrderService {
     public Page<OrdersResponse> getReadyBooks(OrderSearchRequest bookSearchCond) {
         Page<Order> orders = orderRepository.searchReadyBookWithPaging(bookSearchCond);
 
-        List<OrdersResponse> ordersResponses = orders.stream()
+        List<OrdersResponse> ordersResponses = orders.getTotalElements() == 0 ? new ArrayList<>() : orders.stream()
                 .map(OrdersResponse::new)
                 .collect(Collectors.toList());
 

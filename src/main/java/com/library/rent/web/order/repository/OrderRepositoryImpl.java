@@ -6,6 +6,7 @@ import com.library.rent.web.order.domain.OrderStatus;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import io.jsonwebtoken.lang.Collections;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import javax.persistence.EntityManager;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import static com.library.rent.web.order.domain.QOrder.order;
 
@@ -46,6 +48,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     private BooleanExpression orderIdEq(Long orderId) {
+
         return orderId != null ? order.id.eq(orderId) : null;
     }
 
