@@ -3,6 +3,7 @@ package com.library.rent.service;
 import com.library.rent.web.auth.Authority;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
+import com.library.rent.web.book.domain.ISBN;
 import com.library.rent.web.book.repository.BookRepository;
 import com.library.rent.web.member.domain.Member;
 import com.library.rent.web.member.repository.MemberRepository;
@@ -90,8 +91,10 @@ public class OrderServiceTest {
         String memberEmail = "admin@naver.com";
         Member member = new Member(memberEmail, "admin", "nick", true);
         memberRepository.save(member);
-        Book b1 = Book.createWaitBook("book1", 1, "1ISBN");
-        Book b2 = Book.createWaitBook("book2", 1, "2ISBN");
+        ISBN isbn1= new ISBN();
+        ISBN isbn2= new ISBN();
+        Book b1 = Book.createWaitBook("book1", 1, Lists.newArrayList(isbn1));
+        Book b2 = Book.createWaitBook("book2", 1, Lists.newArrayList(isbn2));
 
         OrderBook orderBook1 = OrderBook.createOrderBook(b1, 1);
         OrderBook orderBook2 = OrderBook.createOrderBook(b2, 1);

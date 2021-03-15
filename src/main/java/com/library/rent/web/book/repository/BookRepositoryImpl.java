@@ -37,12 +37,11 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
         QueryResults<SaveBookResponse> results = queryFactory
                 .select(
                         Projections.constructor(SaveBookResponse.class,
-                                book.name.as("book_name"), book.isbn, book.imgUrl, book.publisher, book.author, book.bookStatus, orderBook.order.id)
+                                book.name.as("book_name"), book.imgUrl, book.publisher, book.author, orderBook.order.id)
                 ).from(book)
                 .innerJoin(book.orderBookList, orderBook)
                 .where(
                         searchEq(request.getSearch(), request.getBookSearchType()),
-                        statusEq(request.getBookStatus()),
                         startGoe(request.getStartAt()),
                         endLoe(request.getEndAt())
                 )
@@ -70,13 +69,6 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
         return startAt != null ? book.createdDate.goe(startAt) : null;
     }
 
-    private BooleanExpression statusEq(BookStatus bookStatus) {
-        if (bookStatus == BookStatus.ALL)
-            return null;
-
-        return bookStatus != null ? book.bookStatus.eq(bookStatus) : null;
-    }
-
     private BooleanExpression searchEq(String search, BookSearchType searchType) {
         if (search == null || searchType == null)
             return null;
@@ -87,8 +79,8 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
                 return book.author.contains(search);
             case "PUBLISHER":
                 return book.publisher.contains(search);
-            case "ISBN":
-                return book.isbn.contains(search);
+//            case "ISBN":
+//                return book.isbn.contains(search);
             default:
                 break;
         }
@@ -104,9 +96,9 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
         return publisher != null ? book.publisher.eq(publisher) : null;
     }
 
-    private BooleanExpression bookIsbnEq(String isbn) {
-        return isbn != null ? book.isbn.eq(isbn) : null;
-    }
+//    private BooleanExpression bookIsbnEq(String isbn) {
+//        return isbn != null ? book.isbn.eq(isbn) : null;
+//    }
 
     private BooleanExpression bookNameEq(String name) {
         return name != null ? book.name.contains(name) : null;

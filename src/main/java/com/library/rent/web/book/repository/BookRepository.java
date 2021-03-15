@@ -5,13 +5,17 @@ import com.library.rent.web.book.domain.BookStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long>, BookRepositoryCustom {
-    List<Book> findBooksByIsbnIn(List<String> isbnList);
+//    List<Book> findBooksByIsbnIn(List<String> isbnList);
 
-    @Modifying
-    @Query("Update Book b set b.bookStatus = :bookStatus where b.id in :bookList")
-    void updateBookStatus(BookStatus bookStatus, List<Long> bookList);
+    @Query("select b from Book b left join b.isbns i where i.isbn in (:isbns)")
+    Optional<Book> findByIsbnList(@Param("isbns") List<String> isbns);
+//    @Modifying
+//    @Query("Update Book b set b.bookStatus = :bookStatus where b.id in :bookList")
+    /*void updateBookStatus(BookStatus bookStatus, List<Long> bookList);*/
 }

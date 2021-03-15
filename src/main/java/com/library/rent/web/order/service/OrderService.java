@@ -50,8 +50,15 @@ public class OrderService {
         Order order = orderRepository.findOrderById(orderId)
                 .orElseThrow(() -> new GlobalApiException(NOT_FOUND_RESOURCE, orderId + "의 해당하는 주문이 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR));
 
-        if (!CollectionUtils.isEmpty(order.getOrderBookList())) {
-            updateBookStatus(orderStatus, getBookIds(order));
+        List<OrderBook> orderBookList = order.getOrderBookList();
+        if (!CollectionUtils.isEmpty(orderBookList)) {
+            // 기존에 책이 존재하면 재고 +  / 없으면 생성
+            for (OrderBook orderBook : orderBookList)
+            {
+
+            }
+
+//            updateBookStatus(orderStatus, getBookIds(order));
         }
 
         order.setOrderStatus(orderStatus);
@@ -59,10 +66,10 @@ public class OrderService {
         return orderId;
     }
 
-    private void updateBookStatus(OrderStatus orderStatus, List<Long> modifyBookIds) {
-        BookStatus modifyBookStatus = orderStatus == OrderStatus.CANCEL ? BookStatus.CANCEL : BookStatus.COMP;
-        bookRepository.updateBookStatus(modifyBookStatus, modifyBookIds);
-    }
+//    private void updateBookStatus(OrderStatus orderStatus, List<Long> modifyBookIds) {
+//        BookStatus modifyBookStatus = orderStatus == OrderStatus.CANCEL ? BookStatus.CANCEL : BookStatus.COMP;
+//        bookRepository.updateBookStatus(modifyBookStatus, modifyBookIds);
+//    }
 
     private List<Long> getBookIds(Order order) {
         return order.getOrderBookList()

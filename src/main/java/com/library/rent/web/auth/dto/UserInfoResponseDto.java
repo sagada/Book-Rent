@@ -17,7 +17,6 @@ public class UserInfoResponseDto {
     public UserInfoResponseDto(String email, String nickname, Set<Authority> role) {
         this.email = email;
         this.nickname = nickname;
-
         this.role = role.isEmpty() ? "" : role.stream()
                 .map(Authority::getAuthorityName)
                 .collect(Collectors.joining(" "));

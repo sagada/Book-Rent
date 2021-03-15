@@ -2,6 +2,7 @@ package com.library.rent.web.book.dto;
 
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
+import com.library.rent.web.book.domain.ISBN;
 import lombok.*;
 
 import javax.validation.Valid;
@@ -9,7 +10,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BookDto {
 
@@ -46,11 +49,23 @@ public class BookDto {
             this.author = author;
         }
 
+        public Book newBook()
+        {
+            return Book.builder()
+                    .name(getName())
+                    .author(getAuthor())
+                    .imgUrl(getImgUrl())
+                    .publisher(getPublisher())
+                    .quantity(0)
+                    .build();
+        }
+
         public Book createReadyBook() {
+            List<ISBN> isbnList = Arrays.stream(isbn.split(" ")).map(ISBN::new).collect(Collectors.toList());
             return Book.builder()
                     .quantity(quantity)
                     .imgUrl(imgUrl)
-                    .isbn(isbn)
+                    .isbns(isbnList)
                     .name(name)
                     .publisher(publisher)
                     .author(author)

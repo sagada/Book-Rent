@@ -3,6 +3,7 @@ package com.library.rent.web.order.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
+import com.library.rent.web.book.domain.ISBN;
 import com.library.rent.web.order.domain.Order;
 import com.library.rent.web.order.domain.OrderBook;
 import com.library.rent.web.order.domain.OrderStatus;
@@ -44,7 +45,7 @@ public class OrdersResponse {
         private Long orderBookId;
         private String bookName;
         private int quantity;
-        private String isbn;
+        private List<ISBN> isbns;
         private String author;
         private BookStatus bookStatus;
         private String publisher;
@@ -57,10 +58,9 @@ public class OrdersResponse {
             this.bookId = book.getId();
             this.bookName = book.getName();
             this.quantity = book.getQuantity();
-            this.isbn = book.getIsbn();
+            this.isbns = book.getIsbns();
             this.author = book.getAuthor();
             this.publisher = book.getPublisher();
-            this.bookStatus = book.getBookStatus();
         }
     }
 

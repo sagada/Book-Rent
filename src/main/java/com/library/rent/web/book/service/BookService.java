@@ -1,8 +1,10 @@
 package com.library.rent.web.book.service;
 
 import com.library.rent.web.book.domain.Book;
+import com.library.rent.web.book.domain.ISBN;
 import com.library.rent.web.book.dto.*;
 import com.library.rent.web.book.repository.BookRepository;
+import com.library.rent.web.book.repository.IsbnRepository;
 import com.library.rent.web.exception.ErrorCode;
 import com.library.rent.web.exception.GlobalApiException;
 import com.library.rent.web.member.domain.Member;
@@ -17,7 +19,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -27,6 +33,7 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final OrderRepository orderRepository;
+    private final IsbnRepository isbnRepository;
 
     public ResponseEntity<Page<SaveBookResponse>> getSavedBook(BookSearchRequest bookSearchRequest) {
 
@@ -38,11 +45,34 @@ public class BookService {
     @Transactional
     public void orderBook(BookDto.SetBookDto param, Member member)
     {
-//        checkDuplicateIsbns(param);
-        List<Book> books = createBook(param);
+        List<Book> books = new ArrayList<>();
+
+        for (BookDto.SetBookParam bookParam : param.getSetBookParamList())
+        {
+            if (bookParam.getIsbn().isEmpty())
+            {
+                throw new GlobalApiException(
+                        ErrorCode.PARAMETER_ERROR
+                        , "ISBN이 존재하지 않는 책은 주문이 불가능합니다."
+                        ,HttpStatus.INTERNAL_SERVER_ERROR
+                );
+            }
+
+            List<String> isbns = Arrays.asList(bookParam.getIsbn().split(" "));
+
+            if (!isbnRepository.existsByIsbnIn(isbns))
+            {
+                List<ISBN> isbnList = isbns.stream().map(ISBN::new).collect(Collectors.toList());
+                isbnRepository.saveAll(isbnList);
+                Book newBook = bookParam.newBook();
+
+                newBook.setIsbns(isbnList);
+                bookRepository.save(newBook);
+                books.add(newBook);
+            }
+        }
 
         List<OrderBook> orderBooks = createOrderBookList(books);
-
         Order order = Order.createOrder(orderBooks, member);
         orderRepository.save(order);
     }
@@ -54,30 +84,4 @@ public class BookService {
                 .collect(Collectors.toList());
     }
 
-    private void checkDuplicateIsbns(BookDto.SetBookDto param)
-    {
-        List<String> isbnList = getIsbnList(param);
-        List<Book> findBookByIsbnList = bookRepository.findBooksByIsbnIn(isbnList);
-
-        if (!CollectionUtils.isEmpty(findBookByIsbnList)) {
-            String errorBookList = findBookByIsbnList
-                    .stream()
-                    .map(Book::getName)
-                    .collect(Collectors.joining(",\n"));
-
-            throw new GlobalApiException(ErrorCode.DUPLICATE_BOOK, errorBookList, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    private List<String> getIsbnList(BookDto.SetBookDto param) {
-        return param.getSetBookParamList().stream()
-                .map(BookDto.SetBookParam::getIsbn)
-                .collect(Collectors.toList());
-    }
-
-    private List<Book> createBook(BookDto.SetBookDto param) {
-        return param.getSetBookParamList().stream()
-                .map(BookDto.SetBookParam::createReadyBook)
-                .collect(Collectors.toList());
-    }
 }

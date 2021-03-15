@@ -50,26 +50,26 @@ public class OrderRepositoryTest {
         Member m = new Member("takeaw@naver.com", "tt", "nick", true);
 
 
-        for (int i = 0; i < 50; i++) {
-            Book newbook = new Book();
-            newbook.setBookStatus(BookStatus.WAIT);
-            newbook.setIsbn("126163L" + i);
-            bookRepository.save(newbook);
-
-            Book newbook2 = new Book();
-            newbook2.setBookStatus(BookStatus.WAIT);
-            newbook2.setIsbn("1223223L" + i);
-            bookRepository.save(newbook2);
-
-            OrderBook orderBook1 = OrderBook.createOrderBook(newbook, 10);
-            OrderBook orderBook2 = OrderBook.createOrderBook(newbook2, 12);
-
-            orderBookRepository.save(orderBook1);
-            orderBookRepository.save(orderBook2);
-            Order order2 = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2), m);
-
-            orderRepository.save(order2);
-        }
+//        for (int i = 0; i < 50; i++) {
+//            Book newbook = new Book();
+//            newbook.setBookStatus(BookStatus.WAIT);
+//            newbook.setIsbn("126163L" + i);
+//            bookRepository.save(newbook);
+//
+//            Book newbook2 = new Book();
+//            newbook2.setBookStatus(BookStatus.WAIT);
+//            newbook2.setIsbn("1223223L" + i);
+//            bookRepository.save(newbook2);
+//
+//            OrderBook orderBook1 = OrderBook.createOrderBook(newbook, 10);
+//            OrderBook orderBook2 = OrderBook.createOrderBook(newbook2, 12);
+//
+//            orderBookRepository.save(orderBook1);
+//            orderBookRepository.save(orderBook2);
+//            Order order2 = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2), m);
+//
+//            orderRepository.save(order2);
+//        }
     }
 
     @Test

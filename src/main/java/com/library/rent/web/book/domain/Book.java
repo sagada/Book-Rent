@@ -1,6 +1,7 @@
 package com.library.rent.web.book.domain;
 
 import com.library.rent.web.BaseEntity;
+import com.library.rent.web.book.dto.BookDto;
 import com.library.rent.web.order.domain.OrderBook;
 import lombok.*;
 
@@ -10,11 +11,10 @@ import java.util.List;
 
 @Getter
 @Table(indexes = {
-        @Index(name = "isbn_idx", columnList = "isbn"),
         @Index(name = "name_idx", columnList = "book_name")
 })
 @NoArgsConstructor
-@ToString(of = {"name", "isbn", "publisher", "quantity", "bookStatus"})
+@ToString(of = {"name", "publisher", "quantity"})
 @Entity
 public class Book extends BaseEntity {
     @Id
@@ -25,8 +25,8 @@ public class Book extends BaseEntity {
     @Column(name = "book_name")
     private String name;
 
-    @Column(name = "isbn")
-    private String isbn;
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    private List<ISBN> isbns = new ArrayList<>();
 
     private int quantity;
     private String publisher;
@@ -35,48 +35,45 @@ public class Book extends BaseEntity {
     @Column(columnDefinition = "TEXT", name = "img_url")
     private String imgUrl;
 
-    @Enumerated(EnumType.STRING)
-    private BookStatus bookStatus;
-
-    @OneToMany(mappedBy = "book")
+    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private List<OrderBook> orderBookList = new ArrayList<>();
 
     public Book(String name) {
         this.name = name;
     }
 
-    public void setBookStatus(BookStatus bookStatus) {
-        this.bookStatus = bookStatus;
+    public static Book createWaitBook(String name, int quantity, List<ISBN> isbnList) {
+        return Book.builder().name(name).quantity(quantity).isbns(isbnList).bookStatus(BookStatus.WAIT).build();
     }
 
-    public static Book createWaitBook(String name, int quantity, String isbn) {
-        return Book.builder().name(name).quantity(quantity).isbn(isbn).bookStatus(BookStatus.WAIT).build();
+    public void setIsbns(List<ISBN> isbns) {
+        isbns.forEach(s-> s.setBook(this));
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void addQuantity(int count)
+    {
+        quantity += count;
     }
-
     @Builder
     private Book(
             String name
-            , String isbn
+            , List<ISBN> isbns
             , int quantity
             , String publisher
             , String author
             , String imgUrl
-            , BookStatus bookStatus) {
+            , BookStatus bookStatus)
+    {
         this.name = name;
-        this.isbn = isbn;
         this.quantity = quantity;
         this.publisher = publisher;
+        this.isbns = isbns;
         this.author = author;
         this.imgUrl = imgUrl;
-        this.bookStatus = bookStatus;
     }
 
 
