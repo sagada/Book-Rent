@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,4 +43,14 @@ public class OrderController {
         orderService.deleteOrderBook(orderBookId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @PutMapping("/stock/{orderId}")
+    public ResponseEntity<Void> ok(@PathVariable(value = "orderId") Long orderId)
+    {
+        orderService.stock(orderId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
 }

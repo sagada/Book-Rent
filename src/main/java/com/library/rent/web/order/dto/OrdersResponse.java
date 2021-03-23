@@ -45,7 +45,7 @@ public class OrdersResponse {
         private Long orderBookId;
         private String bookName;
         private int quantity;
-        private List<ISBN> isbns;
+        private String isbns;
         private String author;
         private BookStatus bookStatus;
         private String publisher;
@@ -58,7 +58,7 @@ public class OrdersResponse {
             this.bookId = book.getId();
             this.bookName = book.getName();
             this.quantity = book.getQuantity();
-            this.isbns = book.getIsbns();
+            this.isbns = book.getIsbns().stream().map(ISBN::getIsbn).collect(Collectors.joining(" "));
             this.author = book.getAuthor();
             this.publisher = book.getPublisher();
         }

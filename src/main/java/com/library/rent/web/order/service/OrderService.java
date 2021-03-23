@@ -1,5 +1,6 @@
 package com.library.rent.web.order.service;
 
+import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.book.repository.BookRepository;
 import com.library.rent.web.exception.GlobalApiException;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.library.rent.web.exception.ErrorCode.*;
@@ -35,7 +37,8 @@ public class OrderService {
     private final BookRepository bookRepository;
     private final OrderBookRepository orderBookRepository;
 
-    public Page<OrdersResponse> getReadyBooks(OrderSearchRequest bookSearchCond) {
+    public Page<OrdersResponse> getReadyBooks(OrderSearchRequest bookSearchCond)
+    {
         Page<Order> orders = orderRepository.searchReadyBookWithPaging(bookSearchCond);
 
         List<OrdersResponse> ordersResponses = orders.getTotalElements() == 0 ? new ArrayList<>() : orders.stream()
@@ -46,19 +49,38 @@ public class OrderService {
     }
 
     @Transactional
-    public Long modifyOrderStatus(Long orderId, OrderStatus orderStatus) {
+    public Long modifyOrderStatus(Long orderId, OrderStatus orderStatus)
+    {
         Order order = orderRepository.findOrderById(orderId)
-                .orElseThrow(() -> new GlobalApiException(NOT_FOUND_RESOURCE, orderId + "의 해당하는 주문이 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR));
+                .orElseThrow(() -> new GlobalApiException(
+                        NOT_FOUND_RESOURCE, orderId + "의 해당하는 주문이 없습니다.", HttpStatus.INTERNAL_SERVER_ERROR)
+                );
 
         List<OrderBook> orderBookList = order.getOrderBookList();
         if (!CollectionUtils.isEmpty(orderBookList)) {
-            // 기존에 책이 존재하면 재고 +  / 없으면 생성
-            for (OrderBook orderBook : orderBookList)
+
+            orderBookList.forEach(orderBook ->
             {
 
-            }
+                switch (orderStatus)
+                {
+                    case READY: {
+                        orderBook.getBook().setBookStatus(BookStatus.WAIT);
+                        break;
+                    }
+                    case COMPLETE: {
+                        orderBook.getBook().setBookStatus(BookStatus.COMP);
+                        break;
+                    }
+                    case CANCEL: {
+                        orderBook.getBook().setBookStatus(BookStatus.CANCEL);
+                        break;
+                    }
+                    default :
+                        break;
+                }
+            });
 
-//            updateBookStatus(orderStatus, getBookIds(order));
         }
 
         order.setOrderStatus(orderStatus);
@@ -66,22 +88,21 @@ public class OrderService {
         return orderId;
     }
 
-//    private void updateBookStatus(OrderStatus orderStatus, List<Long> modifyBookIds) {
-//        BookStatus modifyBookStatus = orderStatus == OrderStatus.CANCEL ? BookStatus.CANCEL : BookStatus.COMP;
-//        bookRepository.updateBookStatus(modifyBookStatus, modifyBookIds);
-//    }
-
-    private List<Long> getBookIds(Order order) {
-        return order.getOrderBookList()
-                .stream()
-                .map(orderBook -> orderBook.getBook().getId())
-                .collect(Collectors.toList());
-    }
-
     @Transactional
-    public void deleteOrderBook(Long orderBookId) {
+    public void deleteOrderBook(Long orderBookId)
+    {
         OrderBook orderBook = orderBookRepository.findOrderBookById(orderBookId)
                 .orElseThrow(() -> new GlobalApiException(LOGIC_ERROR, "없는 주문 책 ID 입니다.", HttpStatus.INTERNAL_SERVER_ERROR));
         orderBookRepository.delete(orderBook);
     }
+
+    public void stock(Long orderId)
+    {
+        Order order = orderRepository.findOrderById(orderId)
+                .orElseThrow(()->  new GlobalApiException(NOT_FOUND_RESOURCE, "존재 하지 않는 주문 ID"
+                ,HttpStatus.BAD_REQUEST));
+
+        order.stockOrder();
+    }
+
 }

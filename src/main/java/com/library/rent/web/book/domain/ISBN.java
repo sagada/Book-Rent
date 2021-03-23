@@ -1,5 +1,6 @@
 package com.library.rent.web.book.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -16,6 +17,7 @@ public class ISBN {
     private Long id;
 
     @JoinColumn(name= "book_id")
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Book book;
 

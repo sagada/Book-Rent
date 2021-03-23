@@ -53,7 +53,7 @@ public class BookService {
             {
                 throw new GlobalApiException(
                         ErrorCode.PARAMETER_ERROR
-                        , "ISBN이 존재하지 않는 책은 주문이 불가능합니다."
+                        , "ISBN이 존재하지 않는 책은 주문이 불가능 합니다."
                         ,HttpStatus.INTERNAL_SERVER_ERROR
                 );
             }

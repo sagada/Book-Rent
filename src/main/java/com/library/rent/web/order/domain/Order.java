@@ -1,6 +1,7 @@
 package com.library.rent.web.order.domain;
 
 
+import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.member.domain.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -59,6 +60,12 @@ public class Order {
         orderBooks.forEach(order::addOrderBook);
 
         return order;
+    }
+
+    public void stockOrder()
+    {
+        this.getOrderBookList().forEach(orderBook -> orderBook.getBook().setBookStatus(BookStatus.COMP));
+        setOrderStatus(OrderStatus.COMPLETE);
     }
 
 }

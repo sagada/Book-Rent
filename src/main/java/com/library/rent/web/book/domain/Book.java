@@ -1,5 +1,6 @@
 package com.library.rent.web.book.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.library.rent.web.BaseEntity;
 import com.library.rent.web.book.dto.BookDto;
 import com.library.rent.web.order.domain.OrderBook;
@@ -25,7 +26,8 @@ public class Book extends BaseEntity {
     @Column(name = "book_name")
     private String name;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"isbn"})
     private List<ISBN> isbns = new ArrayList<>();
 
     private int quantity;
@@ -37,6 +39,18 @@ public class Book extends BaseEntity {
 
     @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
     private List<OrderBook> orderBookList = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "book_status")
+    private BookStatus bookStatus;
+
+    public void setBookStatus(BookStatus bookStatus) {
+        this.bookStatus = bookStatus;
+    }
+
+    public BookStatus getBookStatus() {
+        return bookStatus;
+    }
 
     public Book(String name) {
         this.name = name;
