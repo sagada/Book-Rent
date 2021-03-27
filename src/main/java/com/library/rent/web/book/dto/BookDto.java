@@ -55,23 +55,12 @@ public class BookDto {
                     .name(getName())
                     .author(getAuthor())
                     .imgUrl(getImgUrl())
+                    .bookStatus(BookStatus.WAIT)
                     .publisher(getPublisher())
-                    .quantity(0)
+                    .quantity(getQuantity())
                     .build();
         }
 
-        public Book createReadyBook() {
-            List<ISBN> isbnList = Arrays.stream(isbn.split(" ")).map(ISBN::new).collect(Collectors.toList());
-            return Book.builder()
-                    .quantity(quantity)
-                    .imgUrl(imgUrl)
-                    .isbns(isbnList)
-                    .name(name)
-                    .publisher(publisher)
-                    .author(author)
-                    .bookStatus(BookStatus.WAIT)
-                    .build();
-        }
     }
 
     @Getter

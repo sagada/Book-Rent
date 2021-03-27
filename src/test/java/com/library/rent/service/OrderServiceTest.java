@@ -83,29 +83,6 @@ public class OrderServiceTest {
         assertThat(result.getNumber()).isEqualTo(0);
     }
 
-    @Test
-    @Transactional
-    public void memberOrderTest()
-    {
-        // given
-        String memberEmail = "admin@naver.com";
-        Member member = new Member(memberEmail, "admin", "nick", true);
-        memberRepository.save(member);
-        ISBN isbn1= new ISBN();
-        ISBN isbn2= new ISBN();
-        Book b1 = Book.createWaitBook("book1", 1, Lists.newArrayList(isbn1));
-        Book b2 = Book.createWaitBook("book2", 1, Lists.newArrayList(isbn2));
-
-        OrderBook orderBook1 = OrderBook.createOrderBook(b1, 1);
-        OrderBook orderBook2 = OrderBook.createOrderBook(b2, 1);
-
-        Order order = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2), member);
-        Order saveOrder = orderRepository.save(order);
-
-        assertThat(saveOrder.getMember().getEmail()).isEqualTo(memberEmail);
-        assertThat(order.getOrderBookList().size()).isEqualTo(2);
-    }
-
 
     @Test
     @Commit

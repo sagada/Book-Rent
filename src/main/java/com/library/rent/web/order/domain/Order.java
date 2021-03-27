@@ -47,13 +47,15 @@ public class Order {
         this.orderStatus = orderStatus;
     }
 
-    public void addOrderBook(OrderBook orderBook) {
-        orderBookList.add(orderBook);
+    public void addOrderBook(OrderBook orderBook)
+    {
         orderBook.setOrder(this);
-        orderBook.getBook().addQuantity(orderBook.getCount());
+        orderBookList.add(orderBook);
+
     }
 
-    public static Order createOrder(List<OrderBook> orderBooks, Member member) {
+    public static Order createOrder(List<OrderBook> orderBooks, Member member)
+    {
         Order order = new Order();
         order.setOrderDate(LocalDateTime.now());
         order.setOrderStatus(OrderStatus.READY);

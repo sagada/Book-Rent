@@ -29,16 +29,19 @@ public class OrderBook extends BaseEntity {
     }
 
     @JoinColumn(name = "book_id")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Book book;
 
-    public OrderBook(int count, Book book) {
-        this.count = count;
+    public void setBook(Book book) {
         this.book = book;
     }
 
-    public static OrderBook createOrderBook(Book book, int count) {
-        return new OrderBook(count, book);
+    public OrderBook(int count) {
+        this.count = count;
+    }
+
+    public static OrderBook createOrderBook(int count) {
+        return new OrderBook(count);
     }
 
 }

@@ -15,7 +15,7 @@ import java.util.List;
         @Index(name = "name_idx", columnList = "book_name")
 })
 @NoArgsConstructor
-@ToString(of = {"name", "publisher", "quantity"})
+@ToString(of = {"name", "publisher", "quantity", "bookStatus"})
 @Entity
 public class Book extends BaseEntity {
     @Id
@@ -86,6 +86,7 @@ public class Book extends BaseEntity {
         this.quantity = quantity;
         this.publisher = publisher;
         this.isbns = isbns;
+        this.bookStatus = bookStatus;
         this.author = author;
         this.imgUrl = imgUrl;
     }
