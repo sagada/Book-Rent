@@ -50,6 +50,7 @@ public class Order {
     public void addOrderBook(OrderBook orderBook) {
         orderBookList.add(orderBook);
         orderBook.setOrder(this);
+        orderBook.getBook().addQuantity(orderBook.getCount());
     }
 
     public static Order createOrder(List<OrderBook> orderBooks, Member member) {

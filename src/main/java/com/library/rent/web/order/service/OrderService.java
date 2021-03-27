@@ -70,6 +70,7 @@ public class OrderService {
                     }
                     case COMPLETE: {
                         orderBook.getBook().setBookStatus(BookStatus.COMP);
+
                         break;
                     }
                     case CANCEL: {
@@ -79,6 +80,8 @@ public class OrderService {
                     default :
                         break;
                 }
+
+                orderBook.getBook().addQuantity(orderBook.getCount());
             });
 
         }

@@ -53,7 +53,7 @@ public class BookService {
             {
                 throw new GlobalApiException(
                         ErrorCode.PARAMETER_ERROR
-                        , "ISBN이 존재하지 않는 책은 주문이 불가능 합니다."
+                        , "ISBN이 존재하지 않는 책은 등록이 불가능 합니다."
                         ,HttpStatus.INTERNAL_SERVER_ERROR
                 );
             }
@@ -64,11 +64,19 @@ public class BookService {
             {
                 List<ISBN> isbnList = isbns.stream().map(ISBN::new).collect(Collectors.toList());
                 isbnRepository.saveAll(isbnList);
-                Book newBook = bookParam.newBook();
-
+                Book newBook = bookParam.newBook();;
                 newBook.setIsbns(isbnList);
                 bookRepository.save(newBook);
                 books.add(newBook);
+            }
+            else
+            {
+                List<ISBN> isbnList = isbns.stream().map(ISBN::new).collect(Collectors.toList());
+
+                Book oldBook = bookRepository.findByIsbnList(isbns).orElseGet(
+                        ()-> Book.createWaitBook(bookParam.getName(),bookParam.getQuantity(), isbnList)
+                );
+                bookRepository.save(oldBook);
             }
         }
 
