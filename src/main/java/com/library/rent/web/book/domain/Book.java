@@ -26,7 +26,7 @@ public class Book extends BaseEntity {
     @Column(name = "book_name")
     private String name;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JsonIgnoreProperties({"isbn"})
     private List<ISBN> isbns = new ArrayList<>();
 

@@ -3,6 +3,7 @@ package com.library.rent.repository;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookSearchType;
 import com.library.rent.web.book.domain.BookStatus;
+import com.library.rent.web.book.domain.ISBN;
 import com.library.rent.web.book.dto.BookSearchRequest;
 import com.library.rent.web.book.dto.SaveBookResponse;
 import com.library.rent.web.book.repository.BookRepository;
@@ -74,39 +75,31 @@ public class BookRepositoryTests {
 //        }
     }
 
-//    @Test
-//    public void createABookTest() {
-//        String bookName = "JPA";
-//        Book book = new Book(bookName);
-//        Book savedBook = bookRepository.save(book);
-//
-//        System.out.println(savedBook);
-//        assertThat(savedBook).isEqualTo(book);
-//        assertThat(savedBook.getName()).isEqualTo(bookName);
-//    }
-//
-//    @Test
-//    public void isbnExistTest() {
-//        String bookName = "JPA";
-//        Book book1 = new Book(bookName);
-//        book1.setIsbn("isbnA");
-//        bookRepository.save(book1);
-//
-//        Book book2 = new Book(bookName);
-//        book2.setIsbn("isbnB");
-//        bookRepository.save(book2);
-//
-//        Book book3 = new Book(bookName);
-//        book3.setIsbn("isbnC");
-//        bookRepository.save(book3);
-//
-//        List<String> checkIsbnList = Lists.newArrayList("isbnA", "isbnB", "isbnC", "isbnD", "isbnE");
-//
-//        List<Book> findBooksByIsbnList = bookRepository.findBooksByIsbnIn(checkIsbnList);
-//
-//        assertThat(findBooksByIsbnList.size()).isEqualTo(3);
-//        assertThat(findBooksByIsbnList.get(0).getIsbn()).isEqualTo("isbnA");
-//    }
+    @Test
+    void createOneBookTest()
+    {
+        String bookName = "JPA";
+        Book book = new Book(bookName);
+        Book savedBook = bookRepository.save(book);
+
+        assertThat(savedBook).isEqualTo(book);
+        assertThat(savedBook.getName()).isEqualTo(bookName);
+    }
+
+    @Test
+    void bookIsbnTest()
+    {
+        String bookName = "JPA";
+        Book book1 = new Book(bookName);
+        ISBN isbn1 = new ISBN("isbn1");
+        isbn1.setBook(book1);
+        book1.getIsbns().add(isbn1);
+
+        Book newBook = bookRepository.save(book1);
+        assertThat(newBook.getIsbns().size()).isEqualTo(1);
+        assertThat(newBook.getIsbns().get(0).getIsbn()).isEqualTo("isbn1");
+    }
+
 //
 //    @Test
 //    public void saveBookSearchWithTitleSearchAndType() {
@@ -126,7 +119,7 @@ public class BookRepositoryTests {
 //        // then
 //        assertThat(saveBookResponses.getContent().size()).isEqualTo(10);
 //    }
-//
+////
 //    @Test
 //    public void saveBookSearchWithIsbnSearch() {
 //        String isbn = "isbn13";
@@ -142,7 +135,6 @@ public class BookRepositoryTests {
 //
 //        // then
 //        assertThat(saveBookResponses.getContent().size()).isEqualTo(1);
-//        assertThat(saveBookResponses.getContent().get(0).getIsbn()).isEqualTo(isbn);
 //    }
 //
 //    @Test
@@ -264,39 +256,4 @@ public class BookRepositoryTests {
 //        Order order2 = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2), m);
 //        return order2;
 //    }
-//
-//    private Order getOrder2() {
-//        Book newbook = new Book();
-//        newbook.setBookStatus(BookStatus.WAIT);
-//        newbook.setIsbn("126162323L");
-//        bookRepository.save(newbook);
-//
-//        Book newbook2 = new Book();
-//        newbook2.setBookStatus(BookStatus.WAIT);
-//        newbook2.setIsbn("122523223L");
-//        bookRepository.save(newbook2);
-//
-//        OrderBook orderBook1 = OrderBook.createOrderBook(newbook, 10);
-//        OrderBook orderBook2 = OrderBook.createOrderBook(newbook2, 12);
-//        Member m = new Member("awewe@naver.com", "123123", "nick11", true);
-//        orderBookRepository.save(orderBook1);
-//        orderBookRepository.save(orderBook2);
-//        Order order2 = Order.createOrder(Lists.newArrayList(orderBook1, orderBook2), m);
-//        return order2;
-//    }
-
-    @Test
-    public void isb()
-    {
-        if (isbnRepository.existsByIsbnIn(Lists.newArrayList("1", "2")))
-        {
-            System.out.println("#");
-        }
-        else
-        {
-            System.out.println("!");
-        }
-
-    }
-
 }
