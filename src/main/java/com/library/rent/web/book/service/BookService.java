@@ -19,7 +19,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,63 +33,65 @@ public class BookService {
     private final IsbnRepository isbnRepository;
     private final OrderBookRepository orderBookRepository;
 
-    public ResponseEntity<Page<SaveBookResponse>> getSavedBook(BookSearchRequest bookSearchRequest) {
+    public ResponseEntity<Page<SaveBookResponse>> getSavedBook(BookSearchRequest bookSearchRequest)
+    {
 
         Page<SaveBookResponse> saveBookResponses = bookRepository.searchBookWithPaging(bookSearchRequest);
 
         return new ResponseEntity<>(saveBookResponses, HttpStatus.OK);
     }
 
+    // TODO : 주문 패키지로 이동 예정
     @Transactional
     public void orderBook(BookDto.SetBookDto param, Member member)
     {
-        List<OrderBook> orderBookList = new ArrayList<>();
 
-        for (BookDto.SetBookParam bookParam : param.getSetBookParamList())
-        {
-            validateSaveBook(bookParam);
-
-            List<String> isbns = Arrays.asList(bookParam.getIsbn().split(" "));
-
-            if (!isbnRepository.existsByIsbnIn(isbns))
-            {
-                createNewBook(orderBookList, bookParam, isbns);
-            }
-            else
-            {
-                List<ISBN> isbnList = isbns.stream().map(ISBN::new).collect(Collectors.toList());
-
-                Book oldBook = bookRepository.findByIsbnList(isbns).orElseGet(
-                        ()-> Book.createWaitBook(bookParam.getName(),bookParam.getQuantity(), isbnList)
-                );
-                bookRepository.save(oldBook);
-            }
-        }
+        List<OrderBook> orderBookList = param.getSetBookParamList()
+                .stream()
+                .map(this::createOrderBook)
+                .collect(Collectors.toList());
 
         Order order = Order.createOrder(orderBookList, member);
         orderRepository.save(order);
     }
 
-    private void createNewBook(List<OrderBook> orderBookList, BookDto.SetBookParam bookParam, List<String> isbns)
+    // TODO : 주문 패키지로 이동 예정
+    private OrderBook createOrderBook(BookDto.SetBookParam bookParam)
     {
-        List<ISBN> isbnList = isbns.stream().map(ISBN::new).collect(Collectors.toList());
-        Book newBook = bookParam.newBook();
-        newBook.setIsbns(isbnList);
-        OrderBook orderBook = OrderBook.createOrderBook(bookParam.getQuantity());
-        orderBook.setBook(newBook);
-        bookRepository.save(newBook);
-        orderBookList.add(orderBook);
+        List<String> isbns = bookParam.getIsbnStr();
+
+        if (!isbnRepository.existsByIsbnIn(isbns))
+        {
+            return createOrderBook(bookParam, isbns);
+        }
+        else
+        {
+            Book oldBook = bookRepository.findByIsbnList(isbns)
+                    .orElseThrow(
+                            () -> new GlobalApiException(
+                                    ErrorCode.LOGIC_ERROR
+                                    , "로직 에러"
+                                    , HttpStatus.INTERNAL_SERVER_ERROR
+                            )
+                    );
+
+            return bookParam.newOrderBook(oldBook, bookParam.getQuantity());
+        }
     }
 
-    private void validateSaveBook(BookDto.SetBookParam bookParam) {
-        if (bookParam.getIsbn().isEmpty())
-        {
-            throw new GlobalApiException(
-                    ErrorCode.PARAMETER_ERROR
-                    , "ISBN이 존재하지 않는 책은 등록이 불가능 합니다."
-                    ,HttpStatus.INTERNAL_SERVER_ERROR
-            );
-        }
+    private OrderBook createOrderBook(BookDto.SetBookParam bookParam, List<String> isbns)
+    {
+        List<ISBN> isbnList = isbns.stream().map(ISBN::new).collect(Collectors.toList());
+        isbnRepository.saveAll(isbnList);
+
+        Book newBook = bookParam.newBook();
+        newBook.setIsbns(isbnList);
+        bookRepository.save(newBook);
+
+        OrderBook orderBook = OrderBook.createOrderBook(bookParam.getQuantity());
+        orderBook.setBook(newBook);
+
+        return orderBook;
     }
 
 }

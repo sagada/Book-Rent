@@ -3,6 +3,8 @@ package com.library.rent.web.book.dto;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.book.domain.ISBN;
+import com.library.rent.web.order.domain.Order;
+import com.library.rent.web.order.domain.OrderBook;
 import lombok.*;
 
 import javax.validation.Valid;
@@ -61,6 +63,17 @@ public class BookDto {
                     .build();
         }
 
+        public OrderBook newOrderBook(Book book, int count)
+        {
+            OrderBook newOrderBook = OrderBook.createOrderBook(count);
+            newOrderBook.setBook(book);
+            return newOrderBook;
+        }
+
+        public List<String> getIsbnStr()
+        {
+            return Arrays.asList(getIsbn().split(" "));
+        }
     }
 
     @Getter
