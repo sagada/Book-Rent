@@ -1,11 +1,10 @@
 package com.library.rent.web.book.repository;
 
-import com.library.rent.web.book.domain.ISBN;
+import com.library.rent.web.book.domain.Isbn;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface IsbnRepository extends JpaRepository<ISBN, Long> {
-    boolean existsByIsbnIn(List<String> isbns);
+public interface IsbnRepository extends JpaRepository<Isbn, Long> {
+    boolean existsByIsbnNmIn(List<String> isbns);
 }

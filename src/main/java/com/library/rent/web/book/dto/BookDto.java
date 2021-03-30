@@ -2,8 +2,6 @@ package com.library.rent.web.book.dto;
 
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
-import com.library.rent.web.book.domain.ISBN;
-import com.library.rent.web.order.domain.Order;
 import com.library.rent.web.order.domain.OrderBook;
 import lombok.*;
 
@@ -14,7 +12,6 @@ import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BookDto {
 

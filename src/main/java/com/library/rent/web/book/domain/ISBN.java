@@ -1,6 +1,6 @@
 package com.library.rent.web.book.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -9,25 +9,33 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@ToString(exclude = {"book"})
-public class ISBN {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"isbnNm", "id"})
+@Table(name ="isbn")
+public class Isbn {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "isbn_id")
     private Long id;
 
     @JoinColumn(name= "book_id")
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Book book;
 
-    private String isbn;
+    @Column(name = "isbn_nm")
+    private String isbnNm;
 
-    public void setBook(Book book) {
+    public void setBook(Book book)
+    {
         this.book = book;
     }
+    public static Isbn newIsbn(String isbn)
+    {
+        return new Isbn(isbn);
+    }
 
-    public ISBN(String isbn) {
-        this.isbn = isbn;
+    public Isbn(String isbnNm)
+    {
+        this.isbnNm = isbnNm;
     }
 }

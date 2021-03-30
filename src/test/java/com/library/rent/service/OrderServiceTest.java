@@ -1,28 +1,22 @@
 package com.library.rent.service;
 
 import com.library.rent.web.auth.Authority;
-import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
-import com.library.rent.web.book.domain.ISBN;
 import com.library.rent.web.book.repository.BookRepository;
 import com.library.rent.web.member.domain.Member;
 import com.library.rent.web.member.repository.MemberRepository;
-import com.library.rent.web.order.domain.Order;
-import com.library.rent.web.order.domain.OrderBook;
 import com.library.rent.web.order.dto.OrderSearchRequest;
 import com.library.rent.web.order.dto.OrdersResponse;
 import com.library.rent.web.order.repository.OrderBookRepository;
 import com.library.rent.web.order.repository.OrderRepository;
 import com.library.rent.web.order.service.OrderService;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Commit;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

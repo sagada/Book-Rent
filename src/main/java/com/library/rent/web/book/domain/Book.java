@@ -1,8 +1,6 @@
 package com.library.rent.web.book.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.library.rent.web.BaseEntity;
-import com.library.rent.web.book.dto.BookDto;
 import com.library.rent.web.order.domain.OrderBook;
 import lombok.*;
 
@@ -26,9 +24,8 @@ public class Book extends BaseEntity {
     @Column(name = "book_name")
     private String name;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JsonIgnoreProperties({"isbn"})
-    private List<ISBN> isbns = new ArrayList<>();
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    private List<Isbn> isbnList = new ArrayList<>();
 
     private int quantity;
     private String publisher;
@@ -37,7 +34,7 @@ public class Book extends BaseEntity {
     @Column(columnDefinition = "TEXT", name = "img_url")
     private String imgUrl;
 
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
     private List<OrderBook> orderBookList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
@@ -56,12 +53,16 @@ public class Book extends BaseEntity {
         this.name = name;
     }
 
-    public static Book createWaitBook(String name, int quantity, List<ISBN> isbnList) {
-        return Book.builder().name(name).quantity(quantity).isbns(isbnList).bookStatus(BookStatus.WAIT).build();
+    public void addIsbn(Isbn isbn)
+    {
+        this.getIsbnList().add(isbn);
+        isbn.setBook(this);
     }
 
-    public void setIsbns(List<ISBN> isbns) {
-        isbns.forEach(s-> s.setBook(this));
+    public void addOrderBook(OrderBook orderBook)
+    {
+        this.getOrderBookList().add(orderBook);
+        orderBook.setBook(this);
     }
 
     public void setName(String name)
@@ -72,10 +73,10 @@ public class Book extends BaseEntity {
     {
         quantity += count;
     }
+
     @Builder
     private Book(
             String name
-            , List<ISBN> isbns
             , int quantity
             , String publisher
             , String author
@@ -85,7 +86,6 @@ public class Book extends BaseEntity {
         this.name = name;
         this.quantity = quantity;
         this.publisher = publisher;
-        this.isbns = isbns;
         this.bookStatus = bookStatus;
         this.author = author;
         this.imgUrl = imgUrl;

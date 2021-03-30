@@ -1,7 +1,7 @@
 package com.library.rent.web.book.service;
 
 import com.library.rent.web.book.domain.Book;
-import com.library.rent.web.book.domain.ISBN;
+import com.library.rent.web.book.domain.Isbn;
 import com.library.rent.web.book.dto.*;
 import com.library.rent.web.book.repository.BookRepository;
 import com.library.rent.web.book.repository.IsbnRepository;
@@ -54,9 +54,10 @@ public class BookService {
     {
         List<String> isbnStr = bookParam.getIsbnStr();
 
-        if (!isbnRepository.existsByIsbnIn(isbnStr))
+        if (!isbnRepository.existsByIsbnNmIn(isbnStr))
         {
-            return createOrderNewBook(bookParam, isbnStr);
+            OrderBook orderNewBook = createOrderNewBook(bookParam, isbnStr);
+            return orderNewBook;
         }
         else
         {
@@ -70,16 +71,15 @@ public class BookService {
     // TODO : 주문 패키지로 이동 예정
     private OrderBook createOrderNewBook(BookDto.SetBookParam bookParam, List<String> isbns)
     {
-        List<ISBN> isbnList = isbns.stream().map(ISBN::new).collect(Collectors.toList());
-        isbnRepository.saveAll(isbnList);
+        List<Isbn> isbnList = isbns.stream().map(Isbn::newIsbn).collect(Collectors.toList());
+        OrderBook orderBook = OrderBook.createOrderBook(bookParam.getQuantity());
 
         Book newBook = bookParam.newBook();
-        newBook.setIsbns(isbnList);
+
+        newBook.addOrderBook(orderBook);
+        isbnList.forEach(newBook::addIsbn);
+
         bookRepository.save(newBook);
-
-        OrderBook orderBook = OrderBook.createOrderBook(bookParam.getQuantity());
-        orderBook.setBook(newBook);
-
         return orderBook;
     }
 

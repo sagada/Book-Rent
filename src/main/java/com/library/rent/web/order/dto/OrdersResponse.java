@@ -3,14 +3,13 @@ package com.library.rent.web.order.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookStatus;
-import com.library.rent.web.book.domain.ISBN;
+import com.library.rent.web.book.domain.Isbn;
 import com.library.rent.web.order.domain.Order;
 import com.library.rent.web.order.domain.OrderBook;
 import com.library.rent.web.order.domain.OrderStatus;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -58,7 +57,7 @@ public class OrdersResponse {
             this.bookId = book.getId();
             this.bookName = book.getName();
             this.quantity = book.getQuantity();
-            this.isbns = book.getIsbns().stream().map(ISBN::getIsbn).collect(Collectors.joining(" "));
+            this.isbns = book.getIsbnList().stream().map(Isbn::getIsbnNm).collect(Collectors.joining(" "));
             this.author = book.getAuthor();
             this.publisher = book.getPublisher();
         }

@@ -32,10 +32,12 @@ feign:
 
 logging:
   level:
+    root: ERROR
+
     org:
       hibernate: info
       springframework:
-        web: info
+        web: debug
         security: debug
 jwt:
   header: Authorization
