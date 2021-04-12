@@ -49,9 +49,8 @@ public class Order {
 
     public void addOrderBook(OrderBook orderBook)
     {
+        this.getOrderBookList().add(orderBook);
         orderBook.setOrder(this);
-        orderBookList.add(orderBook);
-
     }
 
     public static Order createOrder(List<OrderBook> orderBooks, Member member)

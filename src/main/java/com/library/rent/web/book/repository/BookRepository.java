@@ -15,7 +15,9 @@ public interface BookRepository extends JpaRepository<Book, Long>, BookRepositor
 
     @Query("select b from Book b left join b.isbnList i where i.isbnNm in (:isbns)")
     Optional<Book> findByIsbnList(@Param("isbns") List<String> isbns);
-//    @Modifying
-//    @Query("Update Book b set b.bookStatus = :bookStatus where b.id in :bookList")
-    /*void updateBookStatus(BookStatus bookStatus, List<Long> bookList);*/
+
+    @Query("select distinct b from Book b inner join b.isbnList i where i.isbnNm in (:isbns)")
+    Book findBookByIsbnListIn(@Param("isbns") List<String> isbns);
+
+
 }

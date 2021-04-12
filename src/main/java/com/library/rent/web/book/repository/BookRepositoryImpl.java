@@ -1,7 +1,7 @@
 package com.library.rent.web.book.repository;
 
+import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookSearchType;
-import com.library.rent.web.book.domain.BookStatus;
 import com.library.rent.web.book.dto.*;
 import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.Projections;
@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static com.library.rent.web.book.domain.QBook.book;
 import static com.library.rent.web.order.domain.QOrderBook.orderBook;
@@ -51,6 +52,16 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
                 .fetchResults();
 
         return new PageImpl<>(results.getResults(), pageable, results.getTotal());
+    }
+
+    @Override
+    public Book searchBookByIsbnList(List<String> isbn) {
+        Book findABook = queryFactory
+                .select(book)
+                .from(book)
+                .innerJoin(book.isbnList)
+                .where()
+
     }
 
     private int getSearchSaveBookOffset(Pageable pageable) {

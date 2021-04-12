@@ -36,7 +36,7 @@ public class BookService {
         return new ResponseEntity<>(saveBookResponses, HttpStatus.OK);
     }
 
-    // TODO : 주문 패키지로 이동 예정
+    // TODO : order 패키지로 이동 예정
     @Transactional
     public void orderBook(BookDto.SetBookDto param, Member member)
     {
@@ -49,15 +49,15 @@ public class BookService {
         orderRepository.save(order);
     }
 
-    // TODO : 주문 패키지로 이동 예정
+    // TODO : order 패키지로 이동 예정
     private OrderBook createOrderBook(BookDto.SetBookParam bookParam)
     {
         List<String> isbnStr = bookParam.getIsbnStr();
 
+
         if (!isbnRepository.existsByIsbnNmIn(isbnStr))
         {
-            OrderBook orderNewBook = createOrderNewBook(bookParam, isbnStr);
-            return orderNewBook;
+            return createOrderNewBook(bookParam, isbnStr);
         }
         else
         {
@@ -68,7 +68,7 @@ public class BookService {
         }
     }
 
-    // TODO : 주문 패키지로 이동 예정
+    // TODO : order 패키지로 이동 예정
     private OrderBook createOrderNewBook(BookDto.SetBookParam bookParam, List<String> isbns)
     {
         List<Isbn> isbnList = isbns.stream().map(Isbn::newIsbn).collect(Collectors.toList());

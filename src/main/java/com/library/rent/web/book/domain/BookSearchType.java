@@ -4,14 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum BookSearchType {
-    TITLE("TITLE"),
-    AUTHOR("AUTHOR"),
-    PUBLISHER("PUBLISHER"),
-    ISBN("ISBN");
+    TITLE,
+    AUTHOR,
+    PUBLISHER,
+    ISBN;
 
-    private String nm;
-
-    BookSearchType(String nm) {
-        this.nm = nm;
-    }
 }

@@ -17,7 +17,6 @@ import javax.validation.Valid;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/book")
-@Log4j2
 public class BookController {
 
     private final BookService bookService;
