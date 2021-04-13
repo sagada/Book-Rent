@@ -4,7 +4,6 @@ import com.library.rent.web.book.dto.*;
 import com.library.rent.web.book.service.BookService;
 import com.library.rent.web.member.domain.Member;
 import com.library.rent.web.member.service.MemberService;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -31,7 +30,7 @@ public class BookController {
     }
 
     @PostMapping("/kakao")
-    public ResponseEntity<Void> setBook(@RequestBody @Valid BookDto.SetBookDto param)
+    public ResponseEntity<Void> saveBook(@RequestBody @Valid BookDto.SetBookDto param)
     {
         Member member = memberService.findByEmail();
         bookService.orderBook(param, member);

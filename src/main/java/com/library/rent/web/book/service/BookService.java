@@ -54,7 +54,6 @@ public class BookService {
     {
         List<String> isbnStr = bookParam.getIsbnStr();
 
-
         if (!isbnRepository.existsByIsbnNmIn(isbnStr))
         {
             return createOrderNewBook(bookParam, isbnStr);

@@ -56,12 +56,7 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
 
     @Override
     public Book searchBookByIsbnList(List<String> isbn) {
-        Book findABook = queryFactory
-                .select(book)
-                .from(book)
-                .innerJoin(book.isbnList)
-                .where()
-
+        return null;
     }
 
     private int getSearchSaveBookOffset(Pageable pageable) {
@@ -83,12 +78,12 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
     private BooleanExpression searchEq(String search, BookSearchType searchType) {
         if (search == null || searchType == null)
             return null;
-        switch (searchType.getNm()) {
-            case "TITLE":
+        switch (searchType) {
+            case TITLE:
                 return book.name.contains(search);
-            case "AUTHOR":
+            case AUTHOR:
                 return book.author.contains(search);
-            case "PUBLISHER":
+            case PUBLISHER:
                 return book.publisher.contains(search);
 //            case "ISBN":
 //                return book.isbn.contains(search);
@@ -107,9 +102,6 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
         return publisher != null ? book.publisher.eq(publisher) : null;
     }
 
-//    private BooleanExpression bookIsbnEq(String isbn) {
-//        return isbn != null ? book.isbn.eq(isbn) : null;
-//    }
 
     private BooleanExpression bookNameEq(String name) {
         return name != null ? book.name.contains(name) : null;

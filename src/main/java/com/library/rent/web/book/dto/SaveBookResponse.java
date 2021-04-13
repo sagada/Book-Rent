@@ -1,6 +1,6 @@
 package com.library.rent.web.book.dto;
 
-import com.library.rent.web.book.domain.BookStatus;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,7 +15,8 @@ public class SaveBookResponse {
     private String author;
     private Long orderId;
 
-    public SaveBookResponse(
+    @Builder
+    private SaveBookResponse(
             String name, String imgUrl, String publisher, String author, Long orderId) {
         this.name = name;
         this.imgUrl = imgUrl;
