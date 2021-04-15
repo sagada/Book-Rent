@@ -8,6 +8,7 @@ import com.library.rent.web.book.repository.IsbnRepository;
 import com.library.rent.web.exception.ErrorCode;
 import com.library.rent.web.exception.GlobalApiException;
 import com.library.rent.web.member.domain.Member;
+import com.library.rent.web.member.service.MemberService;
 import com.library.rent.web.order.domain.Order;
 import com.library.rent.web.order.domain.OrderBook;
 import com.library.rent.web.order.repository.OrderRepository;
@@ -29,6 +30,7 @@ public class BookService {
     private final BookRepository bookRepository;
     private final OrderRepository orderRepository;
     private final IsbnRepository isbnRepository;
+    private final MemberService memberService;
 
     public ResponseEntity<Page<SaveBookResponse>> getSavedBook(BookSearchRequest bookSearchRequest)
     {
@@ -38,8 +40,9 @@ public class BookService {
 
     // TODO : order 패키지로 이동 예정
     @Transactional
-    public void orderBook(BookDto.SetBookDto param, Member member)
+    public void orderBook(BookDto.SetBookDto param)
     {
+        Member member = memberService.findByEmail();
         List<OrderBook> orderBookList = param.getSetBookParamList()
                 .stream()
                 .map(this::createOrderBook)

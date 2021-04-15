@@ -19,21 +19,17 @@ import javax.validation.Valid;
 public class BookController {
 
     private final BookService bookService;
-    private final MemberService memberService;
-
 
     @Autowired
-    public BookController(BookService bookService, MemberService memberService)
+    public BookController(BookService bookService)
     {
         this.bookService = bookService;
-        this.memberService = memberService;
     }
 
     @PostMapping("/kakao")
     public ResponseEntity<Void> saveBook(@RequestBody @Valid BookDto.SetBookDto param)
     {
-        Member member = memberService.findByEmail();
-        bookService.orderBook(param, member);
+        bookService.orderBook(param);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
