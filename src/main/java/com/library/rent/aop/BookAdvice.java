@@ -19,17 +19,18 @@ import org.springframework.context.annotation.Configuration;
 public class BookAdvice {
 
     private final BookLogRepository bookLogRepository;
-    ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper;
 
     @Autowired
-    public BookAdvice(BookLogRepository bookLogRepository) {
+    public BookAdvice(BookLogRepository bookLogRepository, ObjectMapper mapper) {
         this.bookLogRepository = bookLogRepository;
+        this.mapper = mapper;
     }
 
     @Before("execution(* com.library.rent.web.book.service.BookService.orderBook(..))")
     public void before(JoinPoint jp) throws JsonProcessingException {
 
-        log.info("Method", jp.getSignature().getName());
+        log.info("advice method : {}", jp.getSignature().getName());
         log.info("orderBook Advice");
 
         // 서비스 메서드 한개의 파라미터 보장 함
