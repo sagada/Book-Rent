@@ -57,7 +57,7 @@ public class Member extends BaseEntity {
     private Set<Authority> authorities;
 
     @Builder
-    public Member(Long memberId, String email, String password, String nickname, boolean active, Set<Authority> authorities) {
+    private Member(Long memberId, String email, String password, String nickname, boolean active, Set<Authority> authorities) {
         this.memberId = memberId;
         this.email = email;
         this.password = password;

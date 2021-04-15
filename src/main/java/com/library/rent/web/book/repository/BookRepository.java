@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookRepository extends JpaRepository<Book, Long>, BookRepositoryCustom {
-//    List<Book> findBooksByIsbnIn(List<String> isbnList);
 
     @Query("select b from Book b left join b.isbnList i where i.isbnNm in (:isbns)")
     Optional<Book> findByIsbnList(@Param("isbns") List<String> isbns);
