@@ -2,8 +2,6 @@ package com.library.rent.web.book.controller;
 
 import com.library.rent.web.book.dto.*;
 import com.library.rent.web.book.service.BookService;
-import com.library.rent.web.member.domain.Member;
-import com.library.rent.web.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;

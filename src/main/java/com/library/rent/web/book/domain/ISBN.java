@@ -29,6 +29,7 @@ public class Isbn {
     {
         this.book = book;
     }
+
     public static Isbn newIsbn(String isbn)
     {
         return new Isbn(isbn);

@@ -2,11 +2,16 @@ package com.library.rent.web.book.repository;
 
 import com.library.rent.web.book.domain.Book;
 import com.library.rent.web.book.domain.BookSearchType;
+import com.library.rent.web.book.domain.QIsbn;
 import com.library.rent.web.book.dto.*;
 import com.querydsl.core.QueryResults;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.StringExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.library.rent.web.book.domain.QBook.book;
+import static com.library.rent.web.book.domain.QIsbn.isbn;
 import static com.library.rent.web.order.domain.QOrderBook.orderBook;
 
 
@@ -38,15 +44,23 @@ public class BookRepositoryImpl implements BookRepositoryCustom {
         QueryResults<SaveBookResponse> results = queryFactory
                 .select(
                         Projections.constructor(SaveBookResponse.class,
-                                book.name.as("book_name"), book.imgUrl, book.publisher, book.author, orderBook.order.id)
+                                book.name.as("book_name")
+                                , book.imgUrl
+                                , book.publisher
+                                , book.author
+                                , orderBook.order.id
+                                , Expressions.stringTemplate("group_concat({0})", isbn.isbnNm)
+                        )
                 ).from(book)
                 .innerJoin(book.orderBookList, orderBook)
+                .innerJoin(book.isbnList, isbn)
                 .where(
                         searchEq(request.getSearch(), request.getBookSearchType()),
                         startGoe(request.getStartAt()),
                         endLoe(request.getEndAt())
                 )
                 .offset(getSearchSaveBookOffset(pageable))
+                .groupBy(book.id)
                 .limit(pageable.getPageSize())
                 .orderBy(orderBook.createdDate.desc())
                 .fetchResults();

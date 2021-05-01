@@ -15,7 +15,7 @@ spring:
         batch_fetch_style: dynamic
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database-platform: com.library.rent.config.CustomMySQL5InnoDBDialect
 
 
 kakao:
@@ -36,7 +36,7 @@ logging:
     org:
       hibernate: info
       springframework:
-        web: debug
+        web: info
         security: debug
 jwt:
   header: Authorization

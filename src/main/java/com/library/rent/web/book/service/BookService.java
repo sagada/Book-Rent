@@ -44,13 +44,17 @@ public class BookService {
     public void orderBook(BookDto.SetBookDto param)
     {
         Member member = memberService.findByEmail();
-        List<OrderBook> orderBookList = param.getSetBookParamList()
+        List<OrderBook> orderBookList = createOrderBookList(param);
+        Order order = Order.createOrder(orderBookList, member);
+        orderRepository.save(order);
+    }
+
+    private List<OrderBook> createOrderBookList(BookDto.SetBookDto param)
+    {
+        return param.getSetBookParamList()
                 .stream()
                 .map(this::createOrderBook)
                 .collect(Collectors.toList());
-
-        Order order = Order.createOrder(orderBookList, member);
-        orderRepository.save(order);
     }
 
     // TODO : order 패키지로 이동 예정
@@ -85,5 +89,4 @@ public class BookService {
         bookRepository.save(newBook);
         return orderBook;
     }
-
 }
