@@ -1,9 +1,9 @@
 package com.library.rent.config;
 
-import com.library.rent.jwt.JwtAccessDeniedHandler;
-import com.library.rent.jwt.JwtAuthenticationEntryPoint;
-import com.library.rent.jwt.JwtSecurityConfig;
-import com.library.rent.jwt.TokenProvider;
+import com.library.rent.config.jwt.JwtAccessDeniedHandler;
+import com.library.rent.config.jwt.JwtAuthenticationEntryPoint;
+import com.library.rent.config.jwt.JwtSecurityConfig;
+import com.library.rent.config.jwt.TokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

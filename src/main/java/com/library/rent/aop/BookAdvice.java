@@ -45,17 +45,4 @@ public class BookAdvice {
         }
     }
 
-    @AfterReturning("execution(* com.library.rent.web.order.service.OrderService.stock(..))")
-    public void stockLog(JoinPoint jp) throws JsonProcessingException {
-
-        log.info("advice method : {}", jp.getSignature().getName());
-        log.info("createOrderBook AfterReturning Advice");
-
-
-        Object obj = jp.getSignature().getName();
-
-        System.out.println(obj);
-    }
-
-
 }

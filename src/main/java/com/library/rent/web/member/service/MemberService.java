@@ -1,6 +1,6 @@
 package com.library.rent.web.member.service;
 
-import com.library.rent.util.SecurityUtil;
+import com.library.rent.common.utils.SecurityUtil;
 import com.library.rent.web.auth.AuthUtil;
 import com.library.rent.web.auth.Authority;
 import com.library.rent.web.exception.ErrorCode;

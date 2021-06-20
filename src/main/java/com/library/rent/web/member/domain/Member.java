@@ -1,10 +1,9 @@
 package com.library.rent.web.member.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.library.rent.web.BaseEntity;
+import com.library.rent.common.BaseEntity;
 import com.library.rent.web.auth.Authority;
 import com.library.rent.web.order.domain.Order;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.library.rent.jwt;
+package com.library.rent.config.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

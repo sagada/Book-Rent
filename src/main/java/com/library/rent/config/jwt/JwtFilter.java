@@ -1,4 +1,4 @@
-package com.library.rent.jwt;
+package com.library.rent.config.jwt;
 
 
 import org.slf4j.Logger;

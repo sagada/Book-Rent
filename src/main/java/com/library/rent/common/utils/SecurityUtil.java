@@ -1,4 +1,4 @@
-package com.library.rent.util;
+package com.library.rent.common.utils;
 
 
 import org.slf4j.Logger;

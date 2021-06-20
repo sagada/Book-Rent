@@ -1,4 +1,4 @@
-package com.library.rent.web;
+package com.library.rent.common;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

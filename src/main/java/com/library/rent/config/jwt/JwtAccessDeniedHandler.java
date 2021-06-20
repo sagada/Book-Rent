@@ -1,4 +1,4 @@
-package com.library.rent.jwt;
+package com.library.rent.config.jwt;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

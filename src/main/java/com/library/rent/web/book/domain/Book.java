@@ -1,6 +1,6 @@
 package com.library.rent.web.book.domain;
 
-import com.library.rent.web.BaseEntity;
+import com.library.rent.common.BaseEntity;
 import com.library.rent.web.order.domain.OrderBook;
 import lombok.*;
 

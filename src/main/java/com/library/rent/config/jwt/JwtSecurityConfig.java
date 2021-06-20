@@ -1,4 +1,4 @@
-package com.library.rent.jwt;
+package com.library.rent.config.jwt;
 
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

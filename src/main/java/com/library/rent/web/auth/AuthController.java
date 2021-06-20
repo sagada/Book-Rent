@@ -1,7 +1,7 @@
 package com.library.rent.web.auth;
 
-import com.library.rent.jwt.JwtFilter;
-import com.library.rent.jwt.TokenProvider;
+import com.library.rent.config.jwt.JwtFilter;
+import com.library.rent.config.jwt.TokenProvider;
 import com.library.rent.web.auth.dto.UserInfoResponseDto;
 import com.library.rent.web.exception.ErrorCode;
 import com.library.rent.web.exception.GlobalApiException;

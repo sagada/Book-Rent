@@ -1,7 +1,7 @@
 package com.library.rent.web.book.domain;
 
 
-import com.library.rent.web.BaseEntity;
+import com.library.rent.common.BaseEntity;
 import com.library.rent.web.auth.AuthUtil;
 import lombok.AccessLevel;
 import lombok.Getter;
